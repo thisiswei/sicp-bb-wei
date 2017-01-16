@@ -487,4 +487,16 @@
               (else (cont-frac-iter-helper n d (- k 1) (/ (n k) (+ (d k) acc))))))
       (cont-frac-iter-helper n d k 0))
 
+    ; 1.38
+
+    (define de-frac-continuis
+      (cont-frac-iter
+        (lambda (i) 1.0)
+        (lambda (i)
+          (cond ((= (remainder i 3) 2) (* 2 (/ (+ 1 i) 3)))
+                (else 1)))
+        10))
+
+
+
 )
