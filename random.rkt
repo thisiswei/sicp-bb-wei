@@ -497,6 +497,13 @@
                 (else 1)))
         10))
 
-
+    (define (tan-cf x k)
+      (cont-frac-iter
+        (lambda (i)
+          (cond ((= i 1) x)
+                (else (square x))))
+        (lambda (i)
+          (+ 1 (* 2 (- i 1))))
+        k))
 
 )
