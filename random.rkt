@@ -522,5 +522,17 @@
           (lambda (y) (- (square y) x)))
         1.0))
 
+    (define (fixed-point-formula g formula guess)
+      (fixed-point (formula g) guess))
+
+    ; y = x/y
+    ; avg(y + x/y)
+
+    (define (sqrt-1st-method x)
+      (fixed-point-formula (lambda (y) (/ x y)) avg-damp 1.0))
+
+    (define (sqrt-2nd-method x)
+      (fixed-point-formula (lambda (y) (- (square y) x)) newton 1.0))
+
 
 )
