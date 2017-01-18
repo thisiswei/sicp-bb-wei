@@ -572,9 +572,13 @@
     (define (inc x)
       (+ x 1))
 
+    ; 1.43
+    (define (repeated f n)
+      (cond ((= n 1) f)
+            (else (compose f (repeated f (- n 1))))))
 
-
-
-
+    (define (repeated-bb g n)
+      (cond ((= n 1) g)
+            (else (repeated-bb (compose g g) (- n 1)))))
 
 )
