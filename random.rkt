@@ -506,4 +506,21 @@
           (+ 1 (* 2 (- i 1))))
         k))
 
+    (define (deriv g)
+      (let ((dx 0.00001))
+          (lambda (x) (/ (- (g (+ x dx)) (g x)) dx))))
+
+    ((deriv cube) 5)
+
+    (define (newton g)
+      (lambda (x)
+        (- x (/ (g x) ((deriv g) x)))))
+
+    (define (sqrt-ng x)
+      (fixed-point
+        (newton
+          (lambda (y) (- (square y) x)))
+        1.0))
+
+
 )
