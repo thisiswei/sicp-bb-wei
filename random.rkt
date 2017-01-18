@@ -516,6 +516,9 @@
       (lambda (x)
         (- x (/ (g x) ((deriv g) x)))))
 
+    (define (newtons-method g guess)
+      (fixed-point (newton g) guess))
+
     (define (sqrt-ng x)
       (fixed-point
         (newton
@@ -533,6 +536,31 @@
 
     (define (sqrt-2nd-method x)
       (fixed-point-formula (lambda (y) (- (square y) x)) newton 1.0))
+
+    ; 1.40
+    ; (newtons-method (cubic a b c) 1)
+    (define (cubic-formular x a b c)
+      (define (cubic a b c)
+        (lambda (y)
+          ; x*x*x + a*x*x + b *x + c
+          (- y
+             (+ (* x x x)
+                (* a (square x))
+                (* b x)
+                c))))
+
+      (newtons-method (cubic a b c) 1))
+
+
+
+    ; (define (sqrt-newton x)
+    ;   (newtons-method
+    ;       ; y*y = x
+    ;       (lambda (y)
+    ;         (- (square y)
+    ;            x))
+    ;       1.0))
+
 
 
 )
