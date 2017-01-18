@@ -561,6 +561,20 @@
     ;            x))
     ;       1.0))
 
+    ; 1.41
+    (define (double-f f)
+      (lambda (x) (f (f x))))
+
+    ; 1.42
+    (define (compose f g)
+      (lambda (x) (f (g x))))
+
+    (define (inc x)
+      (+ x 1))
+
+
+
+
 
 
 )
