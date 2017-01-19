@@ -581,4 +581,56 @@
       (cond ((= n 1) g)
             (else (repeated-bb (compose g g) (- n 1)))))
 
+    ; 1.44
+    (define (smooth f)
+      (define dx 0.00001)
+
+      (lambda (x)
+        (average
+          (+ (f (- x dx))
+             (f x))
+          (f (+ x dx)))))
+
+    (define (n-fold-smooth f n)
+      (repeated (smooth f) n))
+
+    ; 1.45
+    (define (calculate-a n)
+      (if (< n 2) 0
+        (+ 1 (calculate-a (/ n 2)))))
+
+    (define (nth-root n x)
+      (let ((num-repeat (calculate-a n)))
+        (fixed-point
+          (repeated-bb
+            (avg-damp (lambda (y) (/ x (my-expt y (- n 1)))))
+            num-repeat)
+          1.0)))
+
+    (define (cubic-fixed-point x)
+      (fixed-point
+        (avg-damp
+          (lambda (y)
+            (/ x (square y))))
+        1.0))
+
+    (define (fourth-fixed-point x)
+      (fixed-point
+        (avg-damp
+            (avg-damp
+              (lambda (y)
+                (/ x (* y y y)))))
+        1.0))
+
+
+    (define (eighth-fixed-point x)
+      (fixed-point
+        (avg-damp
+            (avg-damp
+                (avg-damp
+                  (lambda (y)
+                    (/ x (* y y y y y y y))))))
+        1.0))
+
+
 )
