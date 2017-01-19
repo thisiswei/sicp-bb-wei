@@ -603,6 +603,8 @@
       (let ((num-repeat (calculate-a n)))
         (fixed-point
           (repeated-bb
+            ; figure out following by using simple example:
+            ; ((repeated (avg-damp inc) 2) 2)
             (avg-damp (lambda (y) (/ x (my-expt y (- n 1)))))
             num-repeat)
           1.0)))
