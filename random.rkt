@@ -634,5 +634,32 @@
                     (/ x (* y y y y y y y))))))
         1.0))
 
+    ; 1.46
+    (define (iterative-improve good-enough improve)
+      (define (keep-improve guess)
+        (cond ((good-enough guess) guess)
+              (else (keep-improve (improve guess)))))
+      keep-improve)
+
+    (define (sqrt-iter-improve x)
+      ((iterative-improve
+         (lambda (y) (< (abs (- (* y y) x)) 0.001))
+         (lambda (y) (average y (/ x y)))
+         ) 1.0))
+
+    (define (fixed-point-iter-improve f guess)
+      ((iterative-improve
+         (lambda (guess)
+           (< (abs (- guess (f guess)))
+              0.00001))
+          f)
+       guess))
+
+    (define (test-fixed-point-iter x)
+      (fixed-point-iter-improve (lambda (y) (/ x y)) 1.0))
+
+
+
+
 
 )
