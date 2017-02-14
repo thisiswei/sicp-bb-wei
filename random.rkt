@@ -658,8 +658,92 @@
     (define (test-fixed-point-iter x)
       (fixed-point-iter-improve (lambda (y) (/ x y)) 1.0))
 
+    ; 2017-02-14
+    ; 2.2
+    (define (make-segment p1 p2)
+      (cons p1 p2))
+
+
+    (define (start-segment s)
+      (car s))
+
+
+    (define (end-segment s)
+      (cdr s))
+
+
+    (define (make-point x y)
+      (cons x y))
+
+
+    (define (x-point p)
+      (car p))
+
+
+    (define (y-point p)
+      (cdr p))
+
+
+    (define (print-point p)
+      (newline)
+      (display "(")
+      (display (x-point p))
+      (display ",")
+      (display (y-point p))
+      (display ")"))
+
+    (define (midpoint-segment s)
+      (let
+        ((starts (start-segment s))
+         (ends (end-segment s)))
+        (make-point
+          (average
+            (x-point starts)
+            (x-point ends))
+          (average
+            (y-point starts)
+            (y-point ends)))))
+
+    ; (print-point (midpoint-segment (make-segment (make-point 1 2) (make-point 5 4))))
+    ; (3,3)
+
+    ; 2.3
+    ; (define (make-rect s1 s2)
+    ;   (cons s1 s2))
+
+
+    ; (define (len rect)
+
+    ;   (let ((s1 (car rect))
+    ;         (s2 (cdr rect))
+
+    ;         (s1-start (start-segment s1))
+    ;         (s1-end (end-segment s1))
+
+    ;         (s2-start (start-segment s2))
+    ;         (s2-end (end-segment s2)))
+
+    ;     (x-point start-s1)
+    ;     (y-point end-s1)
 
 
 
+    ;   )
+
+
+    ; (define (wid rect)
+    ;   (...))
+
+
+    ; (define (perimeter rect)
+    ;   (let ((l (len rect))
+    ;         (w (wid rect)))
+    ;     (* 2 (+ l w))))
+
+
+    ; (define (area rect)
+    ;   (let ((l (len rect))
+    ;         (w (wid rect)))
+    ;     (* l w)))
 
 )
