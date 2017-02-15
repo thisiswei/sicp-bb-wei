@@ -746,4 +746,49 @@
     ;         (w (wid rect)))
     ;     (* l w)))
 
+    ; 2.5
+    (define (my-cons x y)
+      (define (dispatch m)
+        (cond ((= m 0) x)
+              ((= m 1) y)
+              (else (error "wtf"))))
+      dispatch)
+
+    (define (my-car z) (z 0))
+
+    (define (my-cdr z) (z 1))
+
+
+    (define (cons-2 x y)
+      (lambda (m) (m x y)))
+
+    (define (car-2 z)
+      (z (lambda (p q) p)))
+
+    (define (cdr-2 z)
+      (z (lambda (p q) q)))
+
+
+    (define (cons-3 a b)
+      (* (my-expt 2 a)
+         (my-expt 3 b)))
+
+    (define (car-3 z)
+      (cond ((odd? z) 0)
+            (else (+ 1 (car-3 (/ z 2))))))
+
+    (define (cdr-3 z)
+      (cond
+        ((= z 1) 0)
+        ((even? z) (cdr-3 (/ z 2)))
+        (else (+ 1 (cdr-3 (/ z 3))))))
+
+
+    ; 2.6
+    (define zero (lambda (f) (lambda (x) x)))
+
+    (define (add-1 n)
+      (lambda (f)
+        (lambda (x) (f ((n f) x)))))
+
 )
