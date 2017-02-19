@@ -879,6 +879,11 @@
                            (cdr z)))
             (else (same-parity-helper p acc (cdr z)))))
 
+    (define (same-parity-bb x . z)
+      (if (even? x)
+        (append (list x) (filter even? z))
+        (append (list x) (filter odd? z))))
+
 
 
 
