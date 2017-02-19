@@ -884,8 +884,27 @@
         (append (list x) (filter even? z))
         (append (list x) (filter odd? z))))
 
+    ; 2.21
+    (define (square-list items)
+      (if (null? items)
+        null
+        (cons (square (car items))
+              (square-list (cdr items)))))
 
+    (define (square-list-2 items)
+      (map square items))
 
+    ; 2.23
+    (define (for-each p items)
+      (cond ((null? items) #t)
+            ; ((and (p (car items)) #t) (for-each p (cdr items)))))
+            (else (p (car items))
+                  (for-each p (cdr items)))))
+
+    (for-each (lambda (x)
+                (newline)
+                (display x))
+              (list 57 321 88))
 
 
 )
