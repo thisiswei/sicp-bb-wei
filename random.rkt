@@ -791,4 +791,96 @@
       (lambda (f)
         (lambda (x) (f ((n f) x)))))
 
+    (define one (lambda (f) (lambda (x) (f x))))
+
+    (define two (lambda (f) (lambda (x) (f (f x)))))
+
+    (define (plus a b)
+      (lambda (f)
+        (lambda (x)
+          ((b f) ((a f) x)))))
+
+    ; (plus two one)
+
+    ; (f (f (f ..)))
+    (define (my-append list1 list2)
+      (if (null? list1)
+        list2
+        (cons (car list1)
+              (my-append (cdr list1)
+                         list2))))
+
+    ; 2.17
+    (define (last-pair items)
+      (if (null? (cdr items))
+        (car items)
+        (last-pair (cdr items))))
+
+    ; 2.18
+    (define (my-reverse items)
+      (if (null? (cdr items))
+
+        (cons (car items) null)
+        (my-append
+          (my-reverse (cdr items))
+          (cons (car items) null))))
+
+    (define (bb-reverse items)
+      (if (null? items)
+        null
+        (my-append
+          (bb-reverse (cdr items))
+          (cons (car items) null))))
+
+
+
+    ;     (define (bb-reverse list1)
+    ;       (if (null? list1)
+    ;         list1
+    ;         (cons
+    ;           (bb-reverse (cdr list1))
+    ;                       (car list1))))
+
+    ; 2.19
+    (define (cc amt coin-values)
+      (cond
+        ((= amt 0) 1)
+        ((or (< amt 0) (no-more? coin-values)) 0)
+        (else
+          (+ (cc
+               (- amt (first-denominator coin-values))
+               coin-values)
+             (cc
+               amt
+               (rest-coin-values coin-values))))))
+
+    (define (no-more? coin-values)
+      (null? coin-values))
+
+    (define (first-denominator coin-values)
+      (car coin-values))
+
+    (define (rest-coin-values coin-values)
+      (cdr coin-values))
+
+    ; 2.20
+    (define (same-parity n . z)
+      (let
+        ((p (if (odd? n)
+             odd?
+             even?)))
+        (same-parity-helper p (list n) z)))
+
+    (define (same-parity-helper p acc z)
+      (cond ((null? z) acc)
+            ((p (car z)) (same-parity-helper
+                           p
+                           (append acc (cons (car z) null))
+                           (cdr z)))
+            (else (same-parity-helper p acc (cdr z)))))
+
+
+
+
+
 )
