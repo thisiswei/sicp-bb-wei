@@ -906,5 +906,45 @@
                 (display x))
               (list 57 321 88))
 
+    (define (count-leaves t)
+      (cond ((null? t) 0)
+            ((leaf? t) 1)
+            (+ (count-leaves (car t))
+               (count-leaves (cdr t)))))
+
+    (define (leaf? t)
+      (not (pair? t)))
+
+
+    ; 2.25
+    ; (1 3 (5 7) 9)
+    ; (car (cdr (car (cdr (cdr '(1 3 (5 7) 9))))))
+
+    ; ((7))
+    ; (car (car (cons (cons 7 null) null)))
+
+    ; (car (cdr    (cdr (cdr (cdr (cdr (cdr (cons 1 (cons 2 (cons 3 (cons 4 (cons 5 (cons 6 (cons 7 null))))))))))))))
+    ; (1 (2 (3 (4 (5 (6 7))))))
+    (define my-x (list 1 2 3))
+    (define my-y (list 4 5 6))
+    (append my-x my-y)
+    (cons my-x my-y)
+    (list my-x my-y)
+
+    ; 2.27
+    (define (deep-reverse x)
+      (cond ((null? x) null)
+            ((pair? x)
+             (append
+
+               (deep-reverse
+                 (cdr x))
+
+               (list (deep-reverse (car x)))))
+
+            (else x)))
+
+
+
 
 )
