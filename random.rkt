@@ -952,5 +952,53 @@
                      (fringe (cdr x))))
             (else (list x))))
 
+    ; 2.29
+    (define (make-mobile left right)
+      (list left right))
+
+    (define (make-branch real-length structure)
+      (list real-length structure))
+
+    ; a 1
+    (define (left-branch m)
+      (car m))
+
+    ; a 1
+    (define (right-branch m)
+      (car (cdr m)))
+
+    ; a 2
+    (define (branch-length b)
+      (car b))
+
+    ; a 2
+    (define (branch-structure b)
+      (car (cdr b)))
+
+    ; b 1
+    (define (total-weight m)
+      (+ (total-weight-branch (left-branch m))
+         (total-weight-branch (right-branch m))))
+
+    (define (total-weight-branch b)
+      (cond ((is-leaf? b) (branch-structure b))
+            (else (total-weight (branch-structure b)))))
+
+    (define (is-leaf? b)
+      (not (pair? (branch-structure b))))
+
+    ; (total-weight (make-mobile (make-branch 1 3) (make-branch 1 3)))
+
+    ; (total-weight (make-mobile (make-branch 1 3) (make-branch 1 (make-mobile (make-branch 1 3) (make-branch 1 3)))))
+    ; 9
+
+    (define (total-weight-bb m)
+      (tw-helper m 0))
+
+    (define (tw-helper m init)
+      (cond ((null? m) init)
+            ((pair? m) (+ (tw-helper (branch-structure (left-branch m)) init)
+                          (tw-helper (branch-structure (right-branch m)) init)))
+            (else m)))
 
 )
