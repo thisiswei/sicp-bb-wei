@@ -944,7 +944,13 @@
 
             (else x)))
 
-
+    ; 2.28
+    (define (fringe x)
+      (cond ((null? x) null)
+            ((pair? x)
+             (append (fringe (car x))
+                     (fringe (cdr x))))
+            (else (list x))))
 
 
 )
