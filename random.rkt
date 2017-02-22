@@ -1021,5 +1021,21 @@
 
     (define (is-mobile? s)
       (pair? s))
-)
 
+    ; bb
+    (define (balanced-bb? m)
+      (and (b-balanced? (car m))
+           (b-balanced? (car (cdr m)))
+           (= (balanceWeight (car m))
+              (balanceWeight (car (cdr m))))))
+
+    (define (b-balanced? b)
+      (if (pair? (car (cdr b)))
+        (balanced-bb? (car (cdr b)))
+        #t))
+
+    (define (balanceWeight b)
+      (if (pair? (car (cdr b)))
+        (total-weight (car (cdr b)))
+        (* (car b) (car (cdr b)))))
+)
