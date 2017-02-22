@@ -1001,4 +1001,25 @@
                           (tw-helper (branch-structure (right-branch m)) init)))
             (else m)))
 
+    ; 2.29
+    (define (balanced? m)
+      (let ((lf (left-branch m))
+            (rt (right-branch m)))
+        (and (balanced-branch? lf)
+             (balanced-branch? rt)
+             (= (weight-of lf) (weight-of rt)))))
+
+    (define (balanced-branch? b)
+      (let ((s (branch-structure b)))
+        (cond ((is-mobile? s) (balanced? s))
+              (else #t))))
+
+    (define (weight-of b)
+      (let ((s (branch-structure b)))
+        (cond ((is-mobile? s) (total-weight s))
+              (else (* (branch-length b) s)))))
+
+    (define (is-mobile? s)
+      (pair? s))
 )
+
