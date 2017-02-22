@@ -1038,4 +1038,38 @@
       (if (pair? (car (cdr b)))
         (total-weight (car (cdr b)))
         (* (car b) (car (cdr b)))))
+
+
+    (define (scale-tree tree factor)
+      (cond ((null? tree) null)
+            ((not (pair? tree)) (* tree factor))
+            (else (cons (scale-tree (car tree) factor)
+                        (scale-tree (cdr tree) factor)))))
+
+    (define (scale-tree-map tree factor)
+      (map (lambda (x)
+             (cond ((pair? x) (scale-tree-map x factor))
+                   (else (* x factor)))) tree))
+
+    (scale-tree-map (list 1 (list 2 (list 3 4) 5) (list 6 7)) 10)
+
+    ; 2.30
+
+    (define (square-tree tree)
+      (cond ((null? tree) null)
+            ((not (pair? tree)) (square tree))
+            (else (cons (square-tree (car tree))
+                        (square-tree (cdr tree))))))
+
+
+    (define (square-tree-map tree)
+      (map
+        (lambda (sub-tree)
+          (cond ((not (pair? sub-tree)) (square sub-tree))
+                (else (square-tree-map sub-tree))))
+        tree))
+
+
+    (square-tree (list 1 (list 2 (list 3 4) 5) (list 6 7)))
+
 )
