@@ -1084,5 +1084,15 @@
       (tree-map square tree))
 
 
-
+    ; 2.32
+    (define (subset tree)
+      (if (null? tree)
+        (list tree)
+        (let ((head (car tree))
+              (t-rest (cdr tree)))
+          (append
+            (subset t-rest)
+            (map (lambda (x)
+                   (cons head x))
+                 (subset t-rest))))))
 )
