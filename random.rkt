@@ -1095,4 +1095,64 @@
             (map (lambda (x)
                    (cons head x))
                  (subset t-rest))))))
+
+    (define (enumerate-interval low high)
+      (if (> low high) null
+        (cons low (enumerate-interval (+ 1 low) high))))
+
+    (define (enumerate-tree tree)
+      (cond ((null? tree) null)
+            ((pair? tree) (append (enumerate-tree (car tree))
+                                  (enumerate-tree (cdr tree))))
+            (else (list tree))))
+
+    (define (my-accumulate op initial sequence)
+      (cond ((null? sequence) initial)
+            (else
+              (my-accumulate
+                op
+
+                (op initial (car sequence))
+
+                (cdr sequence)))))
+
+    (define (sum-odd-squares tree)
+      (my-accumulate
+        +
+        0
+        (map square
+             (filter odd? (enumerate-tree tree)))))
+
+    ; (define (even-fibs n)
+    ;   (filter
+    ;     even?
+    ;     (map
+    ;       fibs
+    ;       (enumerate-interval 0 n))))
+
+    ; (define (salary-of-highest-paid-programmer records)
+    ;   (max
+    ;     (map salary (filter programmer? records))))
+
+    ; 2.33
+    (define (my-map p sequence)
+      (my-accumulate
+        (lambda (y x)
+          (append y (list (p x))))
+        null
+        sequence))
+
+    ; TODO
+    ; (define (my-append-2 seq1 seq2)
+    ;   (my-accumulate
+    ;     ; '(1 2) 3 => (cons '(1 2) ?? ) => '(1 2 3)
+    ;     cons seq1 (map list seq2)))
+
+    (define (my-length sequence)
+      (my-accumulate
+        (lambda (x y)
+          (+ 1 x))
+        0
+        sequence))
+
 )
