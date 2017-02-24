@@ -1106,18 +1106,23 @@
                                   (enumerate-tree (cdr tree))))
             (else (list tree))))
 
-    (define (my-accumulate op initial sequence)
+    (define (my-accumulate-fold-left op initial sequence)
       (cond ((null? sequence) initial)
             (else
-              (my-accumulate
+              (my-accumulate-fold-left
                 op
 
                 (op (car sequence) initial)
 
                 (cdr sequence)))))
 
+    (define (my-accumulate-fold-right op initial sequence)
+      (if (null? sequence) initial
+        (op (car sequence)
+            (my-accumulate-fold-right op initial (cdr sequence)))))
+
     (define (sum-odd-squares tree)
-      (my-accumulate
+      (my-accumulate-fold-left
         +
         0
         (map square
@@ -1136,24 +1141,37 @@
 
     ; 2.33
     (define (my-map p sequence)
-      (my-accumulate
+      (my-accumulate-fold-left
         (lambda (y x)
           (append y (list (p x))))
         null
         sequence))
 
     (define (my-append-2 seq1 seq2)
-      (my-accumulate
+      (my-accumulate-fold-left
         cons seq2 seq1))
 
     (define (my-length sequence)
-      (my-accumulate
+      (my-accumulate-fold-left
         (lambda (x y)
           (+ 1 x))
         0
         sequence))
 
+    ; 2.34
+    (define (horner-eval-1 x coe-seq)
+      (my-accumulate-fold-left
+        (lambda (this-coe higher-terms)
+          (+ (* higher-terms x)
+             this-coe))
+          0
+          (reverse coe-seq)))
 
-
-
+    (define (horner-eval-2 x coe-seq)
+      (my-accumulate-fold-right
+        (lambda (this-coe higher-terms)
+          (+ (* higher-terms x)
+             this-coe))
+          0
+          coe-seq))
 )
