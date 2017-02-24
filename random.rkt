@@ -1112,7 +1112,7 @@
               (my-accumulate
                 op
 
-                (op initial (car sequence))
+                (op (car sequence) initial)
 
                 (cdr sequence)))))
 
@@ -1142,11 +1142,9 @@
         null
         sequence))
 
-    ; TODO
-    ; (define (my-append-2 seq1 seq2)
-    ;   (my-accumulate
-    ;     ; '(1 2) 3 => (cons '(1 2) ?? ) => '(1 2 3)
-    ;     cons seq1 (map list seq2)))
+    (define (my-append-2 seq1 seq2)
+      (my-accumulate
+        cons seq2 seq1))
 
     (define (my-length sequence)
       (my-accumulate
@@ -1154,5 +1152,8 @@
           (+ 1 x))
         0
         sequence))
+
+
+
 
 )
