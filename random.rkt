@@ -1203,5 +1203,31 @@
               (accumulate-n op init (map cdr seqs)))))
     ; (accumulate-n + 0 '('(1 2 3) '(4 5 6) '(7 8 9) '(10 11 12)))
 
+    (define (dot-product v w)
+      (my-accumulate-fold-right + 0 (map * v w)))
+
+    ; "random.rkt"> (map * '(1 2) '(2 4))
+    ; '(2 8)
+
+    ; 2.37
+    (define (matrix-*-vector m v)
+      (map
+        (lambda (w)
+          (dot-product v w))
+        m))
+
+    (define (transpose mat)
+      (accumulate-n
+        cons
+        null
+        mat))
+
+    (define (matrix-*-matrix m n)
+      (let ((cols (transpose n)))
+        (map
+          (lambda
+            (v)
+            (matrix-*-vector cols v))
+            m)))
 
 )
