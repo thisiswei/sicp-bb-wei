@@ -1184,4 +1184,15 @@
           (lambda (x) 1)
           (enumerate-tree t))))
 
+    (define (count-leaves-bb t)
+      (my-accumulate-fold-right
+        +
+        0
+        (map
+          (lambda (x)
+            (if (pair? x)
+              (count-leaves-bb x)
+              1))
+          t)))
+
 )
