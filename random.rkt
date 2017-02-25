@@ -1230,4 +1230,18 @@
             (matrix-*-vector cols v))
             m)))
 
+    ; 2.39
+    (define (reverse-fold-right sequence)
+      (my-accumulate-fold-right
+        (lambda (x y)
+          (append y (list x)))
+        null
+        sequence))
+
+    (define (reverse-fold-left sequence)
+      (my-accumulate-fold-left
+        (lambda (x y)
+          (append y (list x)))
+        null
+        sequence))
 )
