@@ -1174,4 +1174,14 @@
              this-coe))
           0
           coe-seq))
+
+    ; 2.35
+    (define (count-leaves-2 t)
+      (my-accumulate-fold-right
+        +
+        0
+        (map
+          (lambda (x) 1)
+          (enumerate-tree t))))
+
 )
