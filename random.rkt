@@ -1,6 +1,6 @@
 (module name racket
-
-
+    ; have to put those in the xrepl
+    ; (require xrepl)	
 
     (define (bingbing-add a b)
       (+ a b))
