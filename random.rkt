@@ -1270,4 +1270,31 @@
               (lambda (r) (cons x r))
               (permutations (remove x s))))
           s)))
+
+    (define (my-remove s elem)
+      (cond ((null? s) null)
+            ((= (car s) elem) (cdr s))
+            (else (cons (car s) (my-remove (cdr s) elem)))))
+
+    ; 2.40
+    (define (unique-pairs n)
+      ; pairs (i, j)
+      ; 1 <= j < i <= n
+      (flat-map
+        (lambda (i)
+          (map
+            (lambda (j)
+              (list i j))
+            (enumerate-interval 1 (- i 1))))
+      (enumerate-interval 1 n)))
+
+
+    (define (unique-pairs-bb n)
+      (map
+        (lambda (i)
+          (map
+            (lambda (j)
+              (list i j))
+            (enumerate-interval 1 (- i 1))))
+        (enumerate-interval 1 n)))
 )
