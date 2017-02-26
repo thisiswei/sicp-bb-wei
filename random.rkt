@@ -1297,4 +1297,31 @@
               (list i j))
             (enumerate-interval 1 (- i 1))))
         (enumerate-interval 1 n)))
+
+    ; 2.41
+    ; (i,j,k <=n)
+    ; i+j+k == s
+    (define (find-integer n s)
+      (flat-map permutations
+        (filter
+          (lambda (p)
+            (let ((p1 (car p))
+                  (p2 (cadr p))
+                  (p3 (caddr p)))
+              (= (+ p1 p2 p3) s)))
+          (find-pairs n))))
+
+    (define (find-pairs n)
+      (flat-map
+        (lambda (i)
+          (flat-map
+            (lambda (j)
+              (map
+                (lambda (k) (list i j k))
+                (enumerate-interval 1 (- j 1))))
+              (enumerate-interval 1 (- i 1))))
+      (enumerate-interval 1 n)))
+
+
+
 )
