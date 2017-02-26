@@ -1112,7 +1112,7 @@
               (my-accumulate-fold-left
                 op
 
-                (op (car sequence) initial)
+                (op initial (car sequence))
 
                 (cdr sequence)))))
 
@@ -1241,7 +1241,33 @@
     (define (reverse-fold-left sequence)
       (my-accumulate-fold-left
         (lambda (x y)
-          (append y (list x)))
+          (append (list y) x))
         null
         sequence))
+
+    (define (get-pair n)
+      (my-accumulate-fold-left
+        append
+        null
+        (map (lambda (i)
+            (map (lambda (j)
+                (list i j))
+                  (enumerate-interval 1 (- i 1))))
+              (enumerate-interval 1 n))))
+
+    (define (flat-map proc sequence)
+      (my-accumulate-fold-right
+        append
+        null
+        (map proc sequence)))
+
+    (define (permutations s)
+      (if (null? s)
+        (list null)
+        (flat-map
+          (lambda (x)
+            (map
+              (lambda (r) (cons x r))
+              (permutations (remove x s))))
+          s)))
 )
