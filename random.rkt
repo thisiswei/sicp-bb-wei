@@ -1323,5 +1323,32 @@
       (enumerate-interval 1 n)))
 
 
+    (define (queens board-size)
+      (define empty-board null)
+
+      (define (queens-cols k)
+        (cond ((= k 0) (list empty-board))
+              (else
+                (filter
+                  (lambda (positions) (safe? k positions))
+                  (flat-map
+                    (lambda (rest-queens-positions)
+                      (map (lambda (row)
+                          (combine-queens row rest-queens-positions))
+                        (enumerate-interval 1 board-size)))
+                    (queens-cols (- k 1)))))))
+      (queens-cols board-size))
+
+    (define (safe? k positions)
+      ; can't be on the same row as previous row
+      (...))
+      #| (cond ((= k 1) #t) |#
+      #|       (else (let ((last-pos (last positions))) |#
+      #|               ...) |#
+
+    (define (combine-queens row rest-queens-positions)
+      (cons row rest-queens-positions))
+
+
 
 )
