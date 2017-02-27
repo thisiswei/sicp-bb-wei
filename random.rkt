@@ -1351,6 +1351,16 @@
                        (safe-iterate (+ n 1) (cdr ps)))))))
       (safe-iterate 1 positions))
 
+    (define (safe-bb? cols positions)
+      (let ((last-p (last positions)))
+        (define (loop? cols positions count)
+          (cond ((= count cols) #t)
+                ((= (car positions) last-p) #f)
+                ((= (abs (- last-p (car positions))) (- cols count)) #f)
+                (else (loop? cols (cdr positions) (+ count 1)))))
+        (loop? cols positions 1))
+        )
+
     (define (combine-queens row rest-queens-positions)
       (append rest-queens-positions (list row)))
 
