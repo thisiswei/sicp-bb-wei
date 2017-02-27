@@ -1323,6 +1323,7 @@
       (enumerate-interval 1 n)))
 
 
+    ; 2.42
     (define (queens board-size)
       (define empty-board null)
 
@@ -1340,15 +1341,18 @@
       (queens-cols board-size))
 
     (define (safe? k positions)
-      ; can't be on the same row as previous row
-      (...))
-      #| (cond ((= k 1) #t) |#
-      #|       (else (let ((last-pos (last positions))) |#
-      #|               ...) |#
+      (define (safe-iterate n ps)
+        (cond ((= k n) #t)
+              ((null? ps) #t)
+              (else
+                (let ((current-position (car ps)))
+                  (and (not (= current-position (last positions)))
+                       (not (= (- k n) (abs (- (last positions) current-position))))
+                       (safe-iterate (+ n 1) (cdr ps)))))))
+      (safe-iterate 1 positions))
 
     (define (combine-queens row rest-queens-positions)
-      (cons row rest-queens-positions))
-
+      (append rest-queens-positions (list row)))
 
 
 )
