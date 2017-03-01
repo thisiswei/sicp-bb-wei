@@ -24,4 +24,36 @@
             (below
               painter
               (beside (up-split painter (- n 1)) (up-split painter (- n 1))))))
+
+        ; (define (recursive-img painter n)
+        ;   (if (= n 0)
+        ;     painter
+        ;     ; flip-vert
+        ;     ; flip-horiz
+        ;     ; (let ((corner-split-painter (corner-split painter n)))
+        ;     ;   (flip-vert
+        ;     ;     (flip-horiz
+        ;     ;       corner-split-painter)))))
+        ;     (let ((up-image (up-split ?? ??)))
+        ;       (beside
+        ;         (below (below
+        ;                  (
+        ;                (corner-split (recursive-img painter (- n 1)))
+
+
+        ; (define right-split (split beside below))
+        ; (define up-split (split below beside))
+        ; 2.45
+        (define (split s1 s2)
+          (lambda (painter n)
+            (cond ((= n 0) painter)
+                  (else
+                    (s1
+                      painter
+                      (s2 ((split s1 s2) painter (- n 1))
+                          ((split s1 s2) painter (- n 1))))))))
+
+
+
+
 )
