@@ -92,4 +92,16 @@
         (define (edge2-1 frame)
           (caddr frame))
 
+        ; painters
+        (define (segments->painter segment-list)
+          (lambda (frame)
+            (for-each
+              (lambda (segment)
+                (draw-line
+                  ((frame-coor-map frame)
+                   (start-segment segment))
+                  ((frame-coor-map frame)
+                   (end-segment segment))))
+              segment-list)))
+
 )
