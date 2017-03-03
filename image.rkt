@@ -53,7 +53,30 @@
                       (s2 ((split s1 s2) painter (- n 1))
                           ((split s1 s2) painter (- n 1))))))))
 
+        ; 2.46
+        (define (make-vect x y)
+          (cons x y))
 
+        (define (xcor-vect v)
+          (car v))
 
+        (define (ycor-vet v)
+          (cdr v))
+
+        (define (add-vect v1 v2)
+          (make-vect (+ (xcor-vect v1)
+                        (xcor-vect v2))
+                     (+ (ycor-vet v1)
+                        (ycor-vet v2))))
+
+        (define (sub-vect v1 v2)
+          (make-vect (- (xcor-vect v1)
+                        (xcor-vect v2))
+                     (- (ycor-vet v1)
+                        (ycor-vet v2))))
+
+        (define (scale-vect v s)
+          (make-vect (* (xcor-vect v) s)
+                     (* (ycor-vect v) s)))
 
 )
