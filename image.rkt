@@ -79,4 +79,17 @@
           (make-vect (* (xcor-vect v) s)
                      (* (ycor-vect v) s)))
 
+        ; 2.47
+        (define (make-frame-1 origin edge1 edge2)
+          (list origin edge1 edge2))
+
+        (define (origin-frame-1 frame)
+          (car frame))
+
+        (define (edge1-1 frame)
+          (cadr frame))
+
+        (define (edge2-1 frame)
+          (caddr frame))
+
 )
