@@ -80,16 +80,16 @@
                      (* (ycor-vect v) s)))
 
         ; 2.47
-        (define (make-frame-1 origin edge1 edge2)
+        (define (make-frame origin edge1 edge2)
           (list origin edge1 edge2))
 
-        (define (origin-frame-1 frame)
+        (define (origin-frame frame)
           (car frame))
 
-        (define (edge1-1 frame)
+        (define (edge1 frame)
           (cadr frame))
 
-        (define (edge2-1 frame)
+        (define (edge2 frame)
           (caddr frame))
 
         ; painters
@@ -114,5 +114,49 @@
        (define (end-segment seg)
          (cdr seg))
 
+       ; 2.49
+       ; think the solutions here for 2.49 are wrong
+       ; a
+       (define (outline frame)
+         (let
+           ((origin-opposite ((frame-coord-map frame)
+                              (make-vect (xcor-vect (edge1 frame))
+                                        (ycor-vect (edge2 frame))))))
+           (segments->painter
+             (list
+               (make-segment (origin-frame frame) (edge1 frame))
+               (make-segment (origin-frame frame) (edge2 frame))
+               (make-segment (edge1 frame) origin-opposite)
+               (make-segment (edge2 frame) origin-opposite)))))
+       ; b
+       (define (x-painter frame)
+         (let
+           ((origin-opposite
+              ((frame-coord-map frame)
+               (make-vect (xcor-vect (edge1 frame))
+                          (ycor-vect (edge2 frame))))))
+           (segments->painter
+             (list
+               (make-segment (origin-frame frame) origin-opposite)
+               (make-segment (edge1 frame) (edge2 frame))))))
+
+       ; c
+       (define (diamond-painter frame)
+         (let
+           ; how to get the origin-opposite
+           ((mid-lf (sub-vect (edge2 frame)
+                              (origin-frame frame)))
+            (mid-up (sub-vect origin-opposite
+                              (edge2 frame)))
+            (mid-down (sub-vect (edge1 frame)
+                                (origin-frame frame)))
+            (mid-rt (sub-vect origin-opposite
+                              (edge1 frame))))
+           (segments->painter
+             (list
+               (make-segment mid-lf mid-up)
+               (make-segment mid-up mid-rt)
+               (make-segment mid-rt mid-down)
+               (make-segment mid-down mid-lf)))))
 
 )
