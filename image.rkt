@@ -159,4 +159,16 @@
                (make-segment mid-rt mid-down)
                (make-segment mid-down mid-lf)))))
 
+
+       (define (transform-painter painter origin corner1 corner2)
+         (lambda (frame)
+           (let ((m (frame-coord-map frame))
+                 (new-origin (m origin)))
+             (let ((new-corner1 (sub-vect (m corner1) new-origin))
+                   (new-corner2 (sub-vect (m corner2) new-origin)))
+               (painter (make-frame
+                          new-origin
+                          new-corner1
+                          new-corner2))))))
+
 )
