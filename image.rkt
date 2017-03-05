@@ -176,17 +176,59 @@
        (define (beside painter1 painter2)
          (let ((painter-rt
                  (transform-painter
-                   painter
+                   painter2
                    (make-vect 0.5 0.0)
                    (make-vect 1.0 0.0)
                    (make-vect 0.5 1.0)))
                (painter-lf
                  (transform-painter
-                   painter
+                   painter1
                    (make-vect 0.0 0.0)
                    (make-vect 0.5 0.0)
                    (make-vect 0.0 1.0))))
            (lambda (frame)
              (painter-lf frame)
              (painter-rt frame))))
+
+       ; 2.51
+       ; method a
+       (define (below painter1 painter2)
+         (let ((above-painter
+                 (transform-painter
+                   painter2
+                   (make-vect 0.0 0.5)
+                   (make-vect 1.0 0.5)
+                   (make-vect 0.0 1.0)))
+               (below-painter
+                 (transform-painter
+                   painter1
+                   (make-vect 0.0 0.0)
+                   (make-vect 1.0 0.0)
+                   (make-vect 0.0 0.5))))
+           (lambda (frame)
+             (above-painter frame)
+             (below-painter frame))))
+
+       ; method b
+       (define (below-2 painter1 painter2)
+         ; rotate right
+         (let
+           ((rt (transform-painter
+                    painter2
+                    (make-vect 1.0 0.0)
+                    (make-vect 1.0 1.0)
+                    (make-vect 0.0 0.0)))
+
+           (lf (transform-painter
+                 painter1
+                 (make-vect 1.0 0.0)
+                 (make-vect 1.0 1.0)
+                 (make-vect 0.0 0.0))))
+
+           (let ((before-rotate (beside lf rt)))
+             (transform-painter
+               before-rotate
+               (make-vect 1.0 0.0)
+               (make-vect 1.0 1.0)
+               (make-vect 0.0 0.0)))))
 )
