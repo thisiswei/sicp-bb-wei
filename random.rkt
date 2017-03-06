@@ -1364,5 +1364,10 @@
     (define (combine-queens row rest-queens-positions)
       (append rest-queens-positions (list row)))
 
+    ; 2017-03-06
+    (define (memq item xs)
+      (cond ((null? xs) #f)
+            ((eq? (car xs) item) xs)
+            (else (memq item (cdr xs)))))
 
 )
