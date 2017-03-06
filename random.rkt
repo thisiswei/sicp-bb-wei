@@ -1386,4 +1386,11 @@
             ((and (not (pair? seq1)) (not (pair? seq2))) (eq? seq1 seq2))
             ((and (null? seq1) (null? seq2)) #t)
             (else #f)))
+
+    (define (bb-equal? list1 list2)
+      (cond ((and (null? list1) (null? list2)) #t)
+            ((and (pair? list1) (pair? list2)) (and (bb-equal? (car list1) (car list2))
+                                                    (bb-equal? (cdr list1) (cdr list2))))
+            ((and (not (pair? list1)) (not (pair? list2))) (eq? list1 list2))
+            (else #f)))
 )
