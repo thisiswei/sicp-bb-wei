@@ -1371,13 +1371,19 @@
             (else (memq item (cdr xs)))))
 
     ;2.53
-    (list 'a 'b 'c) => '(a b c)
-    (list (list 'george)) => '((george))
-    (cdr '((x1 x2) (y1 y2))) => '((y1 y2))
-    (cadr '((x1 x2) (y1 y2))) => '(y1 y2)
-    (pair? (car '(a short list))) => #f
-    (memq 'red '((red shoes) (blue socks))) => #f
-    (memq 'red '(red shoes blue socks)) => '(red shoes blue socks)
+    ; (list 'a 'b 'c) => '(a b c)
+    ; (list (list 'george)) => '((george))
+    ; (cdr '((x1 x2) (y1 y2))) => '((y1 y2))
+    ; (cadr '((x1 x2) (y1 y2))) => '(y1 y2)
+    ; (pair? (car '(a short list))) => #f
+    ; (memq 'red '((red shoes) (blue socks))) => #f
+    ; (memq 'red '(red shoes blue socks)) => '(red shoes blue socks)
 
-
+    ; 2.54
+    (define (my-equal? seq1 seq2)
+      (cond ((and (pair? seq1) (pair? seq2)) (and (my-equal? (car seq1) (car seq2))
+                                                  (my-equal? (cdr seq1) (cdr seq2))))
+            ((and (not (pair? seq1)) (not (pair? seq2))) (eq? seq1 seq2))
+            ((and (null? seq1) (null? seq2)) #t)
+            (else #f)))
 )
