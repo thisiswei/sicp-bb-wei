@@ -1393,4 +1393,60 @@
                                                     (bb-equal? (cdr list1) (cdr list2))))
             ((and (not (pair? list1)) (not (pair? list2))) (eq? list1 list2))
             (else #f)))
+
+    ; 2017-03-07
+    ; deriv not working properly
+    (define (deriv-2 f x)
+      (cond ((number? f) 0)
+            ((variable? f) (if (same-variable? f x) 1 0))
+            ((sum? f) (make-sum
+                        (deriv-2 (addend f) x)
+                        (deriv-2 (augend f) x)))
+            (product? f) (make-sum
+                           (make-product
+                             (multiplier f)
+                             (deriv-2 (multiplicand f) x))
+                           (make-product
+                             (deriv-2 (multiplier f) x)
+                             (multiplicand f)))))
+
+    (define (variable? f) (symbol? f))
+    (define (same-variable? x y) (and (variable? x) (variable? y) (eq? x y)))
+    (define (make-sum u v) (list '+ u v))
+    (define (addend f) (cadr f))
+    (define (augend f) (caddr f))
+
+    (define (make-product u v) (list '* u v))
+    (define (multiplier f) (cadr f))
+    (define (multiplicand f) (caddr f))
+
+    (define (sum? f) (and (pair? f) (eq? (car f) '+)))
+    (define (product? f) (and (pair? f) (eq? (car f) '*)))
+
+    ; official
+    (define (deriv-3 exp var)
+      (define (variable? x) (symbol? x))
+      (define (same-variable? v1 v2) (and (variable? v1) (variable? v2) (eq? v1 v2)))
+      (define (make-sum a1 a2) (list '+ a1 a2))
+      (define (make-product m1 m2) (list '* m1 m2))
+      (define (sum? x) (and (pair? x) (eq? (car x) '+)))
+      (define (addend s) (cadr s))
+      (define (augend s) (caddr s))
+      (define (product? x) (and (pair? x) (eq? (car x) '*)))
+      (define (multiplier p) (cadr p))
+      (define (multiplicand p) (caddr p))
+
+      (cond ((number? exp) 0)
+            ((variable? exp) (if (same-variable? exp var) 1 0))
+            ((sum? exp) (make-sum (deriv-3 (addend exp) var)
+                                  (deriv-3 (augend exp) var)))
+            ((product? exp)
+             (make-sum
+               (make-product (multiplier exp)
+                             (deriv-3 (multiplicand exp) var))
+               (make-product (deriv-3 (multiplier exp) var)
+                             (multiplicand exp))))
+            (else (error "error"))))
+
+
 )
