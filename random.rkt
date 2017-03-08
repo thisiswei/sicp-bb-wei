@@ -1491,4 +1491,12 @@
                 (else res)))
         null
         set2))
+
+    ; 2.59
+    (define (union-set set1 set2)
+      (my-accumulate-fold-right
+        (lambda (s res)
+          (adjoin-set s res))
+        set1
+        set2))
 )
