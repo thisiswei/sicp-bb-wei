@@ -1438,15 +1438,57 @@
 
       (cond ((number? exp) 0)
             ((variable? exp) (if (same-variable? exp var) 1 0))
-            ((sum? exp) (make-sum (deriv-3 (addend exp) var)
+            ((sum? exp) (make-sum-2 (deriv-3 (addend exp) var)
                                   (deriv-3 (augend exp) var)))
             ((product? exp)
-             (make-sum
-               (make-product (multiplier exp)
+             (make-sum-2
+               (make-product-2 (multiplier exp)
                              (deriv-3 (multiplicand exp) var))
-               (make-product (deriv-3 (multiplier exp) var)
+               (make-product-2 (deriv-3 (multiplier exp) var)
                              (multiplicand exp))))
             (else (error "error"))))
 
+    (define (make-sum-2 a1 a2)
+      (cond ((=number? a1 0) a2)
+            ((=number? a2 0) a1)
+            ((and (number? a1)
+                  (number? a2)) (+ a1 a2))
+            (else (list '+ a1 a2))))
 
+    (define (make-product-2 a1 a2)
+      (cond ((=number? a1 0) 0)
+            ((=number? a2 0) 0)
+            ((=number? a2 1) a1)
+            ((=number? a1 1) a2)
+            ((and (number? a1)
+                  (number? a2)) (* a1 a2))
+            (else (list '* a1 a2))))
+
+    (define (=number? exp x) (and (number? exp) (eq? x exp)))
+
+    ; sets as unordered lists
+    (define (element-of-set? x set)
+      (cond ((null? set) #f)
+            ((equal? x (car set)) #t)
+            (else (element-of-set? x (cdr set)))))
+
+    (define (adjoin-set x set)
+      (if (element-of-set? x set)
+        set
+        (cons x set)))
+
+    (define (intersection-set set1 set2)
+      (define (intersection-set-iter set1 set2 res)
+        (cond ((or (null? set1) (null? set2)) res)
+              ((element-of-set? (car set1) set2) (intersection-set-iter (cdr set1) set2 (cons (car set1) res)))
+              (else (intersection-set-iter (cdr set1) set2 res))))
+      (intersection-set-iter set1 set2 null))
+
+    (define (intersection-set-accumulate set1 set2)
+      (my-accumulate-fold-right
+        (lambda (s res)
+          (cond ((element-of-set? s set1) (cons s res))
+                (else res)))
+        null
+        set2))
 )
