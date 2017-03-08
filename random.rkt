@@ -1499,4 +1499,15 @@
           (adjoin-set s res))
         set1
         set2))
+
+    (define (intersection-set-orderset set1 set2)
+      (define (intersection-set-orderset-iter s1 s2 res)
+        (if (or (null? s1) (null? s2)) res
+          (let ((x1 (car s1))
+                (x2 (car s2)))
+            (cond
+              ((= x1 x2) (intersection-set-orderset-iter (cdr s1) (cdr s2) (cons x1 res)))
+              ((> x1 x2) (intersection-set-orderset-iter s1 (cdr s2) res))
+              ((< x1 x2) (intersection-set-orderset-iter (cdr s1) s2 res))))))
+      (intersection-set-orderset-iter set1 set2 null))
 )
