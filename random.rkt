@@ -1510,4 +1510,14 @@
               ((> x1 x2) (intersection-set-orderset-iter s1 (cdr s2) res))
               ((< x1 x2) (intersection-set-orderset-iter (cdr s1) s2 res))))))
       (intersection-set-orderset-iter set1 set2 null))
+
+    (define (element-of-set-orderset? elem xs)
+      (cond ((null? xs) #f)
+            (else
+              (let ((head (car xs))
+                    (rest (cdr xs)))
+                (cond ((= head elem) #t)
+                      ((> head elem) #f)
+                      ((< head elem) (element-of-set-orderset? elem rest)))))))
+
 )
