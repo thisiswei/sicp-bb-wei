@@ -1540,5 +1540,26 @@
                                    (ordered-adjoin x (cdr set))))
             ((< x (car set)) (cons x set))))
 
+    ; 2.62
+    (define (ordered-union-set set1 set2)
+      (if (or (null? set1) (null? set2))
+        (append set1 set2)
+        (let
+          ((head1 (car set1))
+           (head2 (car set2))
+           (rest1 (cdr set1))
+           (rest2 (cdr set2)))
+          (cond ((= head1 head2) (cons head1 (ordered-union-set rest1 rest2)))
+                ((> head1 head2) (cons head2 (ordered-union-set set1 rest2)))
+                ((< head1 head2) (cons head1 (ordered-union-set rest1 set2)))))))
+
+    ; 2.62
+    (define (od-union s1 s2)
+      (cond ((null? s1) s2)
+            ((null? s2) s1)
+            ((> (car s1) (car s2)) (cons (car s2) (od-union s1 (cdr s2))))
+            ((= (car s1) (car s2)) (cons (car s1) (od-union (cdr s1) (cdr s2))))
+            ((< (car s1) (car s2)) (cons (car s1) (od-union s2 (cdr s1))))))
+
 
 )
