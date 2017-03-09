@@ -1520,4 +1520,25 @@
                       ((> head elem) #f)
                       ((< head elem) (element-of-set-orderset? elem rest)))))))
 
+    ; 2.61
+    (define (adjoin-set-orderset elem xs)
+      (if (null? xs)
+        (cons elem null)
+        (let ((head (car xs))
+              (rest (cdr xs)))
+          (cond ((= head elem) xs)
+                ((> head elem) (cons elem xs))
+                ((< head elem) (cons
+                                 head
+                                 (adjoin-set-orderset elem rest)))))))
+
+    ; 2.61 bb
+    (define (ordered-adjoin x set)
+      (cond ((null? set) (cons x set))
+            ((= x (car set)) set)
+            ((> x (car set)) (cons (car set)
+                                   (ordered-adjoin x (cdr set))))
+            ((< x (car set)) (cons x set))))
+
+
 )
