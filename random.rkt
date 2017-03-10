@@ -1619,4 +1619,25 @@
     ;                 (display-tree (tree-left-branch t))
     ;                 (display (entry t))
     ;                 (display-tree (tree-right-branch t))) t))))
+
+    ; 2.63
+    (define (tree->list-1 tree)
+      (if (null? tree)
+        null
+        (append
+          (tree->list-1 (tree-left-branch tree))
+          (list (entry tree))
+          (tree->list-1 (tree-right-branch tree)))))
+
+    (define (tree->list-2 tree)
+      (define (tree-list-iterate tree result-list)
+        (cond ((null? tree) result-list)
+              (else (tree-list-iterate
+                      (tree-left-branch tree)
+                      (cons (entry tree)
+                            (tree-list-iterate
+                              (tree-right-branch tree)
+                              result-list))))))
+
+      (tree-list-iterate tree null))
 )
