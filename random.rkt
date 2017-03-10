@@ -1561,5 +1561,62 @@
             ((= (car s1) (car s2)) (cons (car s1) (od-union (cdr s1) (cdr s2))))
             ((< (car s1) (car s2)) (cons (car s1) (od-union s2 (cdr s1))))))
 
+    (define (entry tree)
+      (car tree))
 
+    (define (tree-left-branch tree)
+      (cadr tree))
+
+    (define (tree-right-branch tree)
+      (caddr tree))
+
+    (define (make-tree entry left right)
+      (list entry left right))
+
+    (define (elem-of-set-tree? x set)
+      (if (null? set)
+        #f
+        (let ((current (entry set)))
+          (cond ((= current x) #t)
+                ((< current x) (elem-of-set-tree? x (tree-right-branch set)))
+                ((> current x) (elem-of-set-tree? x (tree-left-branch set)))))))
+
+    ; bb
+    (define (adj-tree x set)
+      (cond ((null? set) (make-tree x null null))
+            ((= x (entry set)) set)
+            ((> x (entry set)) (make-tree
+                                 (entry set)
+                                 (tree-left-branch set)
+                                 (adj-tree x (tree-right-branch set))))
+            ((< x (entry set)) (make-tree
+                                 (entry set)
+                                 (adj-tree x (tree-left-branch set))
+                                 (tree-right-branch set)))))
+
+
+
+    (define (adjoin-set-tree x set)
+      (if (null? set)
+        (make-tree x null null)
+        (let ((lb (tree-left-branch set))
+              (rb (tree-right-branch set))
+              (e (entry set)))
+          (cond
+            ((= x e) set)
+            ((> x e) (make-tree e lb (adjoin-set-tree x rb)))
+            ((< x e) (make-tree e (adjoin-set-tree x lb) rb))))))
+
+    (define my-tree
+      (make-tree 5
+        (make-tree 3 (make-tree 1 null null) null)
+        (make-tree 9 (make-tree 7 null null) (make-tree 11 null null))))
+
+
+    ; (define (display-tree t)
+    ;   (cond ((null t) (display ""))
+    ;         (else ((lambda (x)
+    ;                 (display-tree (tree-left-branch t))
+    ;                 (display (entry t))
+    ;                 (display-tree (tree-right-branch t))) t))))
 )
