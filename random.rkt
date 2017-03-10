@@ -1640,4 +1640,27 @@
                               result-list))))))
 
       (tree-list-iterate tree null))
+    ; 2.64
+    ; converts an given list to a balanced tree
+    ; (define (list->tree ls)
+
+    ;   (define (pick-mid-point ls)
+    ;     (let ((len (length ls)))
+    ;       (cond ((odd? len) (/ (+ 1 len) 2))
+    ;             ((even? len) (/ len 2)))))
+
+
+      ; (cond ((null? ls) null)
+      ;       ((null? (cdr ls)) (make-tree (car ls) null null))
+      ;       (else
+      ;         (let ((mid (pick-mid-point ls))
+      ;               (left-half (pick-left-half ls))
+      ;               (right-half (pick-right-half ls)))
+      ;         (make-tree
+      ;           mid
+      ;           (list->tree left-half)
+      ;           (list->tree right-half))))))
+
+
+
 )
