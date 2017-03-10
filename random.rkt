@@ -1662,5 +1662,15 @@
       ;           (list->tree right-half))))))
 
 
+    ; 2.66
+    (define (lookup-binary given-key tree)
+      (define (key record) (car record))
+
+      (cond ((null? tree) #f)
+            ((> given-key (key (entry tree))) (lookup-binary given-key (tree-right-branch tree)))
+            ((< given-key (key (entry tree))) (lookup-binary given-key (tree-right-branch tree)))
+            ((= given-key (key (entry tree))) (entry tree))))
+
+
 
 )
