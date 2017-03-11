@@ -1672,5 +1672,152 @@
             ((= given-key (key (entry tree))) (entry tree))))
 
 
+    ; representing huffman trees
+    (define (make-leaf symbol weight)
+      (list 'leaf symbol weight))
 
+    (define (leaf-huffman? object) (eq? (car object) 'leaf))
+
+    (define (symbol-leaf x) (cadr x))
+
+    (define (weight-leaf x) (caddr x))
+
+    (define (left-branch-huffman t)
+      (car t))
+
+    (define (right-branch-huffman t)
+      (cadr t))
+
+    (define (make-code-tree left right)
+
+      (define (symbols t)
+        (if (leaf-huffman? t)
+          (list (symbol-leaf t))
+          (caddr t)))
+
+      (define (weight t)
+        (if (leaf-huffman? t)
+          (weight-leaf t)
+          (cadddr t)))
+
+      (list
+        left
+        right
+        (append (symbols left) (symbols right))
+        (+ (weight left) (weight right))))
+
+
+    ; the base case should be simple!
+    (define (decode bits tree)
+      (define (decode-1 bs branch)
+        (if (null? bs)
+          null
+          (let ((next-branch (choose-next-branch (car bs) branch)))
+            (if (leaf-huffman? next-branch)
+              (cons (symbol-leaf next-branch) (decode-1 (cdr bs) tree))
+              (decode-1 (cdr bs) next-branch)))))
+      (decode-1 bits tree))
+
+    (define (choose-next-branch bit branch)
+      (cond ((= bit 0) (left-branch-huffman branch))
+            ((= bit 1) (right-branch-huffman branch))))
+
+
+    ; wrong answer
+    ; (define (decode bits tree)
+    ;   (define (decode-inter bs t res)
+    ;     (cond 
+    ;       ((and (leaf-huffman? t) (null? bs)) (cons (symbol-leaf t) res))
+    ;       ((leaf-huffman? t) (decode-inter (cdr bs) tree (cons (symbol-leaf t) res)))
+    ;       ((or (null? bs) (null? t)) res)
+    ;       ((= (car bs) 0) (decode-inter (cdr bs) (left-branch-huffman t) res))
+    ;       ((= (car bs) 1) (decode-inter (cdr bs) (right-branch-huffman t) res))))
+    ;   (decode-inter bits tree null))
+
+
+    ; wrong answer
+    ; (define (decode-bb bits tree) (decode-bb-helper bits tree null))
+    ; (define (decode-bb-helper bits tree res)
+    ;   (cond
+    ;     ((and (leaf-huffman? tree) (null? bits)) (append res (list (symbol-leaf tree))))
+    ;     ((leaf-huffman? tree) (append res (list (symbol-leaf tree)) (decode-bb (cdr bits) tree)))
+    ;     ((= (car bits) 0) (decode-bb-helper (cdr bits) (car tree) res))
+    ;     ((= (car bits) 1) (decode-bb-helper (cdr bits) (cadr tree) res))))
+
+    ; wrong answer
+    ; (define (decode-bb-helper bits tree res)
+    ;   (if (leaf-huffman? tree)
+    ;     (cond
+    ;       ((null? bits) (append res (list (symbol-leaf tree))))
+    ;       (else (append
+    ;               res
+    ;               (list (symbol-leaf tree))
+    ;               (decode-bb (cdr bits) tree))))
+
+    ;     (if (= (car bits) 0)
+    ;       (decode-bb-helper
+    ;         (cdr bits)
+    ;         (car tree)
+    ;         res)
+    ;       (decode-bb-helper
+    ;         (cdr bits)
+    ;         (cadr tree)
+    ;         res))))
+
+    ; wrong answer
+    ; (define (real-decode bits tree)
+    ;   (decode bits tree null))
+
+    ; (define (decode bits tree res)
+    ;   (cond
+    ;     ((and (null? bits) (leaf-huffman? tree)) (append res (list (symbol-leaf tree))))
+    ;     ((null? bits) res)
+    ;     ((leaf-huffman? tree) (append res (list (symbol-leaf tree)) (real-decode (cdr bits) tree)))
+
+    ;     ((= (car bits) 1) (append (decode (cdr bits) (cadr tree) res)
+    ;                                 (real-decode (cdr bits) tree)))
+
+    ;     ((= (car bits) 0) (append (decode (cdr bits) (car tree) res)
+    ;                                 (real-decode (cdr bits) tree)))))
+
+
+    ; "random.rkt"> my-code-tree
+    ; '((leaf A 8)
+    ;   (((leaf B 3) ((leaf C 1) (leaf D 1) (C D) 2) (B C D) 5)
+    ;    (((leaf E 1) (leaf F 1) (E F) 2)
+    ;     ((leaf G 1) (leaf H 1) (G H) 2)
+    ;     (E F G H)
+    ;     4)
+    ;    (B C D E F G H)
+    ;    9)
+    ;   (A B C D E F G H)
+    ;   17)
+    (define my-code-tree
+      (make-code-tree
+        ; A, 8
+        (make-leaf 'A 8)
+
+        ; BCDEFGH, 9
+        (make-code-tree
+          ; BCD, 5
+          (make-code-tree
+            ; left B3
+            (make-leaf 'B 3)
+            ; CD 2
+            (make-code-tree
+              ;C1
+              (make-leaf 'C 1)
+              (make-leaf 'D 1)))
+
+          ; EFGH, 4
+          (make-code-tree
+            ; EF, 2
+            (make-code-tree
+              (make-leaf 'E 1)
+              (make-leaf 'F 1))
+
+            ; GH, 2
+            (make-code-tree
+              (make-leaf 'G 1)
+              (make-leaf 'H 1))))))
 )
