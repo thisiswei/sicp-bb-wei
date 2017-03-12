@@ -1842,4 +1842,22 @@
       (cond ((null? xs) #f)
             ((eq? (car xs) x) #t)
             (else (elem? x (cdr xs)))))
+
+    (define (encode-bb message tree)
+      (if (null? message)
+        null
+        (append
+          (encode-symbol-bb (car message) tree)
+          (encode-bb (cdr message) tree))))
+
+    (define (encode-symbol-bb msg tree)
+      (if (null? tree)
+        null
+        (let ((left (left-branch-huffman tree))
+              (right (right-branch-huffman tree)))
+          (cond ((leaf-huffman? tree) null)
+                ((elem? msg (symbols left)) (cons 0 (encode-symbol-bb msg left)))
+                ((elem? msg (symbols right)) (cons 1 (encode-symbol-bb msg right)))))))
+
+
 )
