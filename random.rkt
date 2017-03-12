@@ -1688,18 +1688,17 @@
     (define (right-branch-huffman t)
       (cadr t))
 
+    (define (symbols t)
+      (if (leaf-huffman? t)
+        (list (symbol-leaf t))
+        (caddr t)))
+
+    (define (weight t)
+      (if (leaf-huffman? t)
+        (weight-leaf t)
+        (cadddr t)))
+
     (define (make-code-tree left right)
-
-      (define (symbols t)
-        (if (leaf-huffman? t)
-          (list (symbol-leaf t))
-          (caddr t)))
-
-      (define (weight t)
-        (if (leaf-huffman? t)
-          (weight-leaf t)
-          (cadddr t)))
-
       (list
         left
         right
@@ -1820,4 +1819,27 @@
             (make-code-tree
               (make-leaf 'G 1)
               (make-leaf 'H 1))))))
+
+    ; 2017-03-12
+    ; 2.68
+    (define (encode message tree)
+      (if (null? message)
+        null
+        (append
+          (encode-symbol (car message) tree)
+          (encode (cdr message) tree))))
+
+    (define (encode-symbol msg tree)
+      (if (leaf-huffman? tree)
+        null
+        (let ((symbols-left (symbols (left-branch-huffman tree)))
+              (symbols-right (symbols (right-branch-huffman tree))))
+          (cond ((elem? msg symbols-left) (cons 0 (encode-symbol msg (left-branch-huffman tree))))
+                ((elem? msg symbols-right) (cons 1 (encode-symbol msg (right-branch-huffman tree))))
+                (else (error "found nothing"))))))
+
+    (define (elem? x xs)
+      (cond ((null? xs) #f)
+            ((eq? (car xs) x) #t)
+            (else (elem? x (cdr xs)))))
 )
