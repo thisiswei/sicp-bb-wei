@@ -1859,5 +1859,55 @@
                 ((elem? msg (symbols left)) (cons 0 (encode-symbol-bb msg left)))
                 ((elem? msg (symbols right)) (cons 1 (encode-symbol-bb msg right)))))))
 
+    ; 2017-03-12 afternoon
+    ; 2.69
+    (define (adjoin-set-huffman-tree x set)
+      (if (null? set) (list x)
+        (cond ((< (weight x) (weight (car set))) (cons x set))
+              (else (cons (car set) (adjoin-set-huffman-tree x (cdr set)))))))
 
+    (define (make-leaf-set pairs)
+      (if (null? pairs)
+        null
+        (adjoin-set-huffman-tree
+          (make-leaf (car (car pairs))
+                     (cadr (car pairs)))
+          (make-leaf-set (cdr pairs)))))
+
+
+    (define (generate-huffman-tree pairs)
+      (successive-merge (make-leaf-set pairs)))
+
+    (define (successive-merge orderset-leaves)
+      (cond ((null? orderset-leaves) null)
+            ((null? (cdr orderset-leaves)) orderset-leaves)
+            (else
+              (successive-merge
+                (adjoin-set-huffman-tree
+                  (make-code-tree
+                    (car orderset-leaves)
+                    (cadr orderset-leaves))
+                  (cddr orderset-leaves))))))
+
+
+    (define my-pairs
+      (list
+        (list 'A 4)
+        (list 'B 2)
+        (list 'C 1)
+        (list 'D 1)))
+
+    (define my-other-pairs
+      (list
+        (list 'A 8)
+        (list 'B 3)
+        (list 'C 1)
+        (list 'D 1)
+        (list 'E 1)
+        (list 'F 1)
+        (list 'G 1)
+        (list 'H 1)))
+
+    (define my-orderset-leaves
+      (make-leaf-set my-pairs))
 )
