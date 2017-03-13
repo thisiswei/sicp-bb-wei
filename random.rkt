@@ -1910,4 +1910,66 @@
 
     (define my-orderset-leaves
       (make-leaf-set my-pairs))
+
+
+    ; 2017-03-13
+    ; 2.70
+    ; (define encode-lyrics
+
+    ;   (define rock-song-pairs
+    ;     (list
+    ;       (list 'A 2)
+    ;       (list 'GET 2)
+    ;       (list 'SHA 3)
+    ;       (list 'WAH 1)
+    ;       (list 'BOOM 1)
+    ;       (list 'JOB 2)
+    ;       (list 'NA 16)
+    ;       (list 'YIP 9)))
+
+    ;   (define mk-tree
+    ;     (generate-huffman-tree rock-song-pairs))
+
+    ;   (define msg
+    ;     '(Get a Job Sha na na na na))
+
+    ;   (encode-bb msg mk-tree))
+
+    ; 2.71 and 2.72 passed
+
+    (define (make-complex-real-img x y)
+      (cons x y))
+
+    (define (complex-real z) (car z))
+
+    (define (complex-img z) (cdr z))
+
+    (define (add-complex z1 z2)
+      (make-complex-real-img
+        (+ (complex-real z1) (complex-real z2))
+        (+ (complex-img z1) (complex-img z2))))
+
+    (define (sub-complex z1 z2)
+      (make-complex-real-img
+        (- (complex-real z1) (complex-real z2))
+        (- (complex-img z1) (complex-img z2))))
+
+    (define (magn z) (sqrt (+ (square (complex-real z)) (square (complex-img z)))))
+
+    (define (c-angle z) (atan (complex-img z) (complex-real z)))
+
+    (define (make-complex-from-M-A m a)
+      (make-complex-real-img
+        (* m (cons a))
+        (* m (sin a))))
+
+    (define (mul-complex z1 z2)
+      (make-complex-from-M-A
+        (* (magn z1) (magn z2))
+        (* (c-angle z1) (c-angle z2))))
+
+    (define (div-complex z1 z2)
+      (make-complex-from-M-A
+        (/ (magn z1) (magn z2))
+        (/ (c-angle z1) (c-angle z2))))
 )
