@@ -1972,4 +1972,41 @@
       (make-complex-from-M-A
         (/ (magn z1) (magn z2))
         (/ (c-angle z1) (c-angle z2))))
+
+
+    ; 2017-03-14 winter storm!
+    (define my-dictionary null)
+    (define (put k1 k2 v)
+      ; like a dictionary, and put the v in [k1][k2]
+      (append (list k1 k2 v) my-dictionary))
+
+    (define (attach-tag tag content)
+      (cons tag content))
+
+    (define (install-rectangular-package)
+      (define (real-part z) (car z))
+      (define (imag-part z) (cdr z))
+      (define (make-from-real-imag x y) (cons x y))
+      (define (magnitude z)
+        (sqrt (+ (square (real-part z))
+                 (square (imag-part z)))))
+      (define (angle z)
+        (atan (imag-part z) (real-part z)))
+      (define (make-from-mag-ang r a)
+        (cons (* r (cos a)) (* r (sin a))))
+      (define (tag x) (attach-tag 'rect x))
+      (put 'real-part '(rect) real-part)
+      (put 'imag-part '(rect) imag-part)
+      (put 'mag '(rect) magnitude)
+      (put 'angle '(rect) angle)
+      (put 'mk-from-real-imag '(rect)
+           (lambda (x y) (tag (make-from-real-imag x y))))
+      (put 'mk-from-mag-ang '(rect)
+           (lambda (r a) (tag (make-from-mag-ang r a))))
+      'done)
+
+
+
+
+
 )
