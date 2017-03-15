@@ -1978,7 +1978,15 @@
     (define my-dictionary null)
     (define (put k1 k2 v)
       ; like a dictionary, and put the v in [k1][k2]
-      (append (list k1 k2 v) my-dictionary))
+      (set! my-dictionary (cons (list k1 k2 v) my-dictionary)))
+
+    (define (get k1 k2)
+      (caddr
+        (car
+          (filter
+            (lambda (x) (eq? (cadr x) k2))
+            (filter (lambda (x) (eq? (car x) k1)) my-dictionary)))))
+
 
     (define (attach-tag tag content)
       (cons tag content))
@@ -2025,5 +2033,52 @@
       (put 'mk-from-mag-ang '(polar)
            (lambda (r a) (tag (make-from-mag-ang r a))))
       'done)
+
+    ; 2017-03-15
+    ; (define (deriv-generic expr var)
+    ;   (let ((my-tag (find-tag expr)))
+    ;     (let (proc ((find-proc my-tag)))
+    ;       (proc var))))
+
+    ; (define (install-number-expr)
+    ;   (define tag x (attach-tag 'number x))
+    ;   (define (cal var) 0)
+    ;   (put 'deriv '(number) cal))
+
+    ; (define (install-variable-expr)
+    ;   (define tag x (attach-tag 'variable x))
+    ;   (define (cal var) ...)
+    ;   (put 'deriv '(variable) cal))
+
+    (define (deriv-generic expr var)
+      (cond ((number? expr) 0)
+            ((variable? expr) (if (same-variable? expr var) 1 0))
+            (else ((get 'deriv (operator expr))
+                   (operands expr) var))))
+
+    (define (operator expr) (car expr))
+    (define (operands expr) (cdr expr))
+
+    ; (define (addend f) (cadr f))
+    ; (define (augend f) (caddr f))
+    (define (install-deriv-sum)
+      (define (my-func operands-expr var)
+        (make-sum
+          (deriv-generic (car operands-expr) var)
+          (deriv-generic (cdr operands-expr) var)))
+      (put 'deriv '+ my-func))
+
+    ; (define (multiplier f) (cadr f))
+    ; (define (multiplicand f) (caddr f))
+    (define (install-deriv-product)
+      (define (my-func operands-expr var)
+        (make-sum
+          (make-product
+            (car operands-expr)
+            (deriv-generic (cadr operands-expr) var))
+          (make-product
+            (deriv-generic (car operands-expr) var)
+            (cadr operands-expr))))
+      (put 'deriv '* my-func))
 
 )
