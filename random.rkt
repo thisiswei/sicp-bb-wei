@@ -2081,4 +2081,23 @@
             (cadr operands-expr))))
       (put 'deriv '* my-func))
 
+    ; 2017-03-16
+    (define (make-from-real-imag-message-passing x y)
+      (define (dispatch op)
+        (cond ((eq? op 'real-part) x)
+              ((eq? op 'imag-part) y)
+              ((eq? op 'mag) (sqrt (+ (square x) (square y))))
+              ((eq? op 'angle (atan x y)))))
+      dispatch)
+
+    (define (apply-generic-message-passing op args)
+      (args op))
+
+    ; 2.75
+
+
+
+
+
+
 )
