@@ -2102,6 +2102,23 @@
               ((eq? op 'ang) y)))
       dispatch)
 
+    (define (install-scheme-number-package)
+      (define (tag x) (attach-tag 'scheme-number x))
+      (define (add x y) (tag (+ x y)))
+      (define (sub x y) (tag (- x y)))
+      (define (mul x y) (tag (* x y)))
+      (define (div x y) (tag (/ x y)))
+      (put 'add '(scheme-number scheme-number) add)
+      (put 'sub '(scheme-number scheme-number) sub)
+      (put 'mul '(scheme-number scheme-number) mul)
+      (put 'div '(scheme-number scheme-number) div)
+      (put 'make 'scheme-number (lambda (x) (tag x)))
+      'done)
+
+    (define (make-scheme-number n)
+      ((get 'make 'scheme-number n)))
+
+
 
 
 )
