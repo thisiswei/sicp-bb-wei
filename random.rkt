@@ -2094,9 +2094,13 @@
       (args op))
 
     ; 2.75
-
-
-
+    (define (make-from-mag-ang-message-passing x y)
+      (define (dispatch op)
+        (cond ((eq? op 'real-part) (* x (cos y)))
+              ((eq? op 'imag-part) (* x (sin y)))
+              ((eq? op 'mag) x)
+              ((eq? op 'ang) y)))
+      dispatch)
 
 
 
