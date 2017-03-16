@@ -1991,6 +1991,12 @@
     (define (attach-tag tag content)
       (cons tag content))
 
+    (define (get-content z)
+      (cadr z))
+
+    (define (type-tag z)
+      (car z))
+
     (define (install-rectangular-package)
       (define (real-part z) (car z))
       (define (imag-part z) (cdr z))
@@ -2118,7 +2124,9 @@
     (define (make-scheme-number n)
       ((get 'make 'scheme-number n)))
 
-
-
+    (define (apply-generic op . args)
+      (let ((type-tags (map type-tag args)))
+        (let ((proc (get op type-tags)))
+          (apply proc (map get-content args)))))
 
 )
