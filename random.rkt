@@ -1984,7 +1984,7 @@
       (caddr
         (car
           (filter
-            (lambda (x) (eq? (cadr x) k2))
+            (lambda (x) (equal? (cadr x) k2))
             (filter (lambda (x) (eq? (car x) k1)) my-dictionary)))))
 
 
@@ -1992,7 +1992,7 @@
       (cons tag content))
 
     (define (get-content z)
-      (cadr z))
+      (cdr z))
 
     (define (type-tag z)
       (car z))
@@ -2122,7 +2122,7 @@
       'done)
 
     (define (make-scheme-number n)
-      ((get 'make 'scheme-number n)))
+      ((get 'make 'scheme-number) n))
 
     (define (apply-generic op . args)
       (let ((type-tags (map type-tag args)))
@@ -2146,13 +2146,45 @@
       (caddr
         (car
           (filter
-            (lambda (x) (eq? (cadr x) k2))
+            (lambda (x) (equal? (cadr x) k2))
             (filter (lambda (x) (eq? (car x) k1)) mapping)))))
+
+    ; install the rectangular pacage
+    (install-scheme-number-package)
+    (install-polar-package)
+    (install-rectangular-package)
+
+    (define (make-from-real-imag-with-tag x y)
+      ((get 'mk-from-real-imag '(rect)) x y))
 
     (define (install-scheme-number->complex)
       (define (scheme-number->complex n)
-        (make-complex-real-img (get-content n 0)))
+        (make-from-real-imag-with-tag (get-content n) 0))
       (put-coercion 'scheme-number 'complex scheme-number->complex))
 
+    (define (apply-very-generic op . args)
+      (let ((type-tags (map type-tag args)))
+        (let ((proc (get op type-tags)))
+          (if proc
+            (apply proc (map get-content args))
+            (if (= (length args) 2)
+              (let ((t1 (car type-tags))
+                    (t2 (cadr type-tags))
+                    (a1 (car args))
+                    (a2 (cadr args)))
+                (let ((t1->t2 (get-coercion t1 t2))
+                      (t2->t1 (get-coercion t2 t1)))
+                  (cond
+                    ((t1->t2) (apply-very-generic op ((t1->t2) a1) a2))
+                    ((t2->t1) (apply-very-generic op a1 ((t2->t1) a2)))
+                    (else (error "error")))))
+              (error "nothing found"))))))
 
+
+    (define my-real-imag-num-1 (make-from-real-imag-with-tag 1 2))
+    (define my-real-imag-num-2 (make-from-real-imag-with-tag 3 4))
+    (define my-scheme-numer-1 (make-scheme-number 4))
+    (define my-scheme-numer-2 (make-scheme-number 3))
+    (apply-very-generic 'add my-scheme-numer-1 my-scheme-numer-2)
 )
+
