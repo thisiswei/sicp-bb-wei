@@ -2129,4 +2129,30 @@
         (let ((proc (get op type-tags)))
           (apply proc (map get-content args)))))
 
+    ; 2017-03-17
+    (define coercion-mapping null)
+
+    (define (put-coercion op type v)
+      (put-helper op type v coercion-mapping))
+
+    (define (get-coercion op type)
+      (get-helper op type coercion-mapping))
+
+    (define (put-helper k1 k2 v mapping)
+      ; like a dictionary, and put the v in [k1][k2]
+      (set! my-dictionary (cons (list k1 k2 v) mapping)))
+
+    (define (get-helper k1 k2 mapping)
+      (caddr
+        (car
+          (filter
+            (lambda (x) (eq? (cadr x) k2))
+            (filter (lambda (x) (eq? (car x) k1)) mapping)))))
+
+    (define (install-scheme-number->complex)
+      (define (scheme-number->complex n)
+        (make-complex-real-img (get-content n 0)))
+      (put-coercion 'scheme-number 'complex scheme-number->complex))
+
+
 )
