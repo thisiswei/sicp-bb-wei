@@ -1981,11 +1981,13 @@
       (set! my-dictionary (cons (list k1 k2 v) my-dictionary)))
 
     (define (get k1 k2)
-      (caddr
-        (car
-          (filter
-            (lambda (x) (equal? (cadr x) k2))
-            (filter (lambda (x) (eq? (car x) k1)) my-dictionary)))))
+      (let ((f1 (filter (lambda (x) (eq? (car x) k1)) my-dictionary)))
+        (if (null? f1)
+          #f
+          (let ((f2 (filter (lambda (x) (equal? (cadr x) k2)) f1)))
+            (if (null? f2)
+              #f
+              (caddr (car f2)))))))
 
 
     (define (attach-tag tag content)
