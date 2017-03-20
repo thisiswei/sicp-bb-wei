@@ -2188,6 +2188,34 @@
 
     ; 2017-03-18
     ; 2.83 -- 2.86 skipped -- come back later
+    ; raise?
+
+    ; (define (install-poly-package)
+    ;   (define (make-poly variable term-list) (cons variable term-list))
+    ;   (define (variable p) (car p))
+    ;   (define (term-list p) (cdr p))
+    ;   (define (same-variable? v1 v2)
+    ;     (equal? v1 v2))
+
+    ;   (define (add-poly p1 p2)
+    ;     (define (add-term t1 t2)
+    ;       (cond ((= (order t1) (order t2)) (add-term..)))))
+
+
+    ;     (if (same-variable? (variable p1) (variable p2))
+    ;       (make-poly
+    ;         (variable p1)
+    ;         add-term (term-list p1) (term-list p2))
+    ;       (error "can't add")))
+
+    ;   (define (mul-poly p1 p2)
+    ;     (if (same-variable? (variable p1) (variable p2))
+    ;       (make-poly
+    ;         (variable p1)
+    ;         mul-term (term-list p1) (term-list p2))
+    ;       (error "can't add")))
+    ;   ..)
+
 
 )
 
