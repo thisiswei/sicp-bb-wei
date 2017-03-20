@@ -2134,22 +2134,18 @@
     ; 2017-03-17
     (define coercion-mapping null)
 
-    (define (put-coercion op type v)
-      (put-helper op type v coercion-mapping))
-
-    (define (get-coercion op type)
-      (get-helper op type coercion-mapping))
-
-    (define (put-helper k1 k2 v mapping)
+    (define (put-coercion k1 k2 v)
       ; like a dictionary, and put the v in [k1][k2]
-      (set! my-dictionary (cons (list k1 k2 v) mapping)))
+      (set! coercion-mapping (cons (list k1 k2 v) coercion-mapping)))
 
-    (define (get-helper k1 k2 mapping)
-      (caddr
-        (car
-          (filter
-            (lambda (x) (equal? (cadr x) k2))
-            (filter (lambda (x) (eq? (car x) k1)) mapping)))))
+    (define (get-coercion k1 k2)
+      (let ((f1 (filter (lambda (x) (eq? (car x) k1)) coercion-mapping)))
+        (if (null? f1)
+          #f
+          (let ((f2 (filter (lambda (x) (equal? (cadr x) k2)) f1)))
+            (if (null? f2)
+              #f
+              (caddr (car f2)))))))
 
     ; install the rectangular pacage
     (install-scheme-number-package)
@@ -2163,6 +2159,7 @@
       (define (scheme-number->complex n)
         (make-from-real-imag-with-tag (get-content n) 0))
       (put-coercion 'scheme-number 'complex scheme-number->complex))
+    (install-scheme-number->complex)
 
     (define (apply-very-generic op . args)
       (let ((type-tags (map type-tag args)))
@@ -2188,5 +2185,6 @@
     (define my-scheme-numer-1 (make-scheme-number 4))
     (define my-scheme-numer-2 (make-scheme-number 3))
     (apply-very-generic 'add my-scheme-numer-1 my-scheme-numer-2)
+
 )
 
