@@ -2190,31 +2190,64 @@
     ; 2.83 -- 2.86 skipped -- come back later
     ; raise?
 
-    ; (define (install-poly-package)
-    ;   (define (make-poly variable term-list) (cons variable term-list))
-    ;   (define (variable p) (car p))
-    ;   (define (term-list p) (cdr p))
-    ;   (define (same-variable? v1 v2)
-    ;     (equal? v1 v2))
+    ; 2017-03-21
+    (define (install-poly-package)
+      (define (make-poly variable term-list) (cons variable term-list))
+      (define (variable p) (car p))
+      (define (term-list p) (cdr p))
+      (define (same-variable? v1 v2)
+        (equal? v1 v2))
 
-    ;   (define (add-poly p1 p2)
-    ;     (define (add-term t1 t2)
-    ;       (cond ((= (order t1) (order t2)) (add-term..)))))
+      (define (add-poly p1 p2)
+        (if (same-variable? (variable p1) (variable p2))
+          (make-poly
+            (variable p1)
+            (add-term (term-list p1) (term-list p2)))
+          (error "can't add")))
 
+      (define (mul-poly p1 p2)
+        (if (same-variable? (variable p1) (variable p2))
+          (make-poly
+            (variable p1)
+            mul-term (term-list p1) (term-list p2))
+          (error "can't add")))
 
-    ;     (if (same-variable? (variable p1) (variable p2))
-    ;       (make-poly
-    ;         (variable p1)
-    ;         add-term (term-list p1) (term-list p2))
-    ;       (error "can't add")))
+      (define (order t) (car t))
+      (define (rest-term t) (cdr t))
+      (define (coef t) (cdr t))
+      (define (make-term o c) (cons o c))
 
-    ;   (define (mul-poly p1 p2)
-    ;     (if (same-variable? (variable p1) (variable p2))
-    ;       (make-poly
-    ;         (variable p1)
-    ;         mul-term (term-list p1) (term-list p2))
-    ;       (error "can't add")))
-    ;   ..)
+      (define (add-term t1 t2)
+        (cond ((null? t1) t2)
+              ((null? t2) t1)
+              (else
+                (let ((o1 (order t1))
+                      (o2 (order t2))
+                      (c1 (coef t1))
+                      (c2 (coef t2)))
+                  (cond ((= o1 o2) (cons (make-term (order t1) (+ (coef t1) (coef t2)))
+                                         (add-term (rest-term t1) (rest-term t2))))
+                        ((> o1 o2) (cons t1 (add-term (rest-term t1) t2)))
+                        (else (cons t2 (add-term t1 (rest-term t2)))))))))
+
+      (define (mul-term t1 t2)
+        (cond ((null? t1) t2)
+              ((null? t2) t1)
+              (else
+                (let ((o1 (order t1))
+                      (o2 (order t2))
+                      (c1 (coef t1))
+                      (c2 (coef t2)))
+                  (cond ((= o1 o2) (cons (make-term (order t1) (* (coef t1) (coef t2)))
+                                         (add-term (rest-term t1) (rest-term t2))))
+                        ((> o1 o2) (cons t1 (add-term (rest-term t1) t2)))
+                        (else (cons t2 (add-term t1 (rest-term t2)))))))))
+
+      (define (tag x) (attach-tag 'poly p))
+      (put 'mul '(poly poly) (lambda (p1 p2) (tag (mul-poly p1 p2))))
+      (put 'add '(poly poly) (lambda (p1 p2) (tag (add-poly p1 p2))))
+      (put 'make 'poly (lambda (var terms) (tag (make-poly var terms))))
+      'done)
 
 
 )
