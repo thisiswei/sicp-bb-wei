@@ -2223,8 +2223,6 @@
         (if (zero=? (coef t1))
           t-list
           (cons t1 t-list)))
-      (define (zero=? t)
-        (eq? t 0))
 
       (define (add-term L1 L2)
         (cond ((empty-termlist? L1) L2)
@@ -2262,6 +2260,12 @@
       (put 'make 'poly (lambda (var terms) (tag (make-poly var terms))))
       'done)
 
+    ; 2017-03-22:
+    ; 2.87
+    (define (zero=? coef)
+      (cond ((pair? coef) #f)
+            ((number? coef) (eq? 0 coef))
+            (else (error "error"))))
 
 )
 
