@@ -2273,6 +2273,62 @@
     ; 2.88
     ; same as add-term
 
+    ; 2.89
+    ; representation for dense poly
+    (define (install-dense-poly)
+      (define (make-poly variable term-list)
+        (cons variable term-list))
+      (define (term-list p) (car p))
+      (define (variable p) (cdr p))
+
+      (define (add-poly p1 p2)
+        (if (same-variable? (variable p1) (variable p2))
+          (make-poly
+            (variable p1)
+            (add-term (term-list p1) (term-list p2)))
+          (error "can't add")))
+
+      (define (mul-poly p1 p2)
+        (if (same-variable? (variable p1) (variable p2))
+          (make-poly
+            (variable p1)
+            (mul-term (term-list p1) (term-list p2)))
+          (error "can't add")))
+
+      ; 2 x**2 + 2 x
+      ; (2 0 0) + (2 0)
+      ; => (2 2 0) ?
+      ; 2* x**2 0 + * x**1 + 2 x00
+      (define (adjoin-terms t1 t-list)
+        (if (zero=? (coef t1))
+          t-list
+          (cons t1 t-list)))
+
+      (define (add-term term-L1 term-L2)
+        (cond ((null? term-L1) term-L2)
+              ((null? term-L2) term-L1)
+              ((> (length term-L1) (length term-L2))
+               (adjoin-terms (car term-L1)
+                             (add-term (cdr term-L1) term-L2)))
+              ((< (length (term-L1) (length term-L2)))
+               (adjoin-terms (car term-L2)
+                             (add-term term-L1 (cdr term-L2))))
+              (else (adjoin-terms
+                      (generic-add
+                        (car term-L1)
+                        (car term-L2))
+                      (add-term (cdr term-L1) (cdr term-L2))))))
+
+
+      (define (mul-term term-L1 term-L2)
+        (..))
+
+      (define (tag x) (attach-tag 'poly-dense p))
+      (put 'mul '(poly-dense poly-dense) (lambda (p1 p2) (tag (mul-poly p1 p2))))
+      (put 'add '(poly-dense poly-dense) (lambda (p1 p2) (tag (add-poly p1 p2))))
+      (put 'make 'poly-dense (lambda (var terms) (tag (make-poly var terms))))
+      'done)
+
 
 )
 
