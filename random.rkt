@@ -2300,7 +2300,7 @@
       ; => (2 2 0) ?
       ; 2* x**2 0 + * x**1 + 2 x00
       (define (adjoin-terms t1 t-list)
-        (if (zero=? (coef t1))
+        (if (eq? t1 0)
           t-list
           (cons t1 t-list)))
 
@@ -2320,8 +2320,11 @@
                       (add-term (cdr term-L1) (cdr term-L2))))))
 
 
-      (define (mul-term term-L1 term-L2)
-        (..))
+      ; (2x + 1) * 2x => 4x**2 + 2x
+      ; (2 1) (2 0) => (4 0 2 0)
+
+      ; TODO
+      (define (mul-term term-L1 term-L2) (..))
 
       (define (tag x) (attach-tag 'poly-dense p))
       (put 'mul '(poly-dense poly-dense) (lambda (p1 p2) (tag (mul-poly p1 p2))))
