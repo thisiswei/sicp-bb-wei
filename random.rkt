@@ -2191,6 +2191,9 @@
     ; raise?
 
     ; 2017-03-21
+    (define (generic-add t1 t2)
+      (apply-very-generic 'add t1 t2))
+
     (define (install-poly-package)
       (define (make-poly variable term-list) (cons variable term-list))
       (define (variable p) (car p))
@@ -2235,7 +2238,7 @@
                         (c1 (coef t1))
                         (c2 (coef t2)))
                     (cond ((= o1 o2) (adjoin-terms
-                                       (make-term o1 (+ c1 c2))
+                                       (make-term o1 (generic-add c1 c2))
                                        (add-term (rest-term L1) (rest-term L2))))
                           ((> o1 o2) (adjoin-terms t1 (add-term (rest-term L2) t2)))
                           (else (adjoin-terms t2 (add-term L1 (rest-term L2))))))))))
@@ -2266,6 +2269,10 @@
       (cond ((pair? coef) #f)
             ((number? coef) (eq? 0 coef))
             (else (error "error"))))
+
+    ; 2.88
+    ; same as add-term
+
 
 )
 
