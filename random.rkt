@@ -2319,19 +2319,42 @@
                         (car term-L2))
                       (add-term (cdr term-L1) (cdr term-L2))))))
 
+      (define empty-termlist? null?)
+      (define (the-empty-termlist) null)
+      (define (rest-term termlist) (cdr termlist))
+      (define (head-term termlist) (car termlist))
 
-      ; (2x + 1) * 2x => 4x**2 + 2x
-      ; (2 1) (2 0) => (4 0 2 0)
+      (define (mul-term term-L1 term-L2)
 
-      ; TODO
-      (define (mul-term term-L1 term-L2) (..))
+        ; 12 -> '(1 2)
+        (define (to-pairs n)
+          (if (= n 0)
+            null
+            (append (to-pairs (quotient n 10)) (list (remainder n 10)))))
+
+        ; '(1 2) -> 12
+        (define (to-number pairs)
+          (my-accumulate-fold-left (lambda (z x) (+ (* z 10) x)) 0 pairs))
+
+        (to-pairs
+          (* (to-number term-L1)
+             (to-number term-L2))))
 
       (define (tag x) (attach-tag 'poly-dense p))
       (put 'mul '(poly-dense poly-dense) (lambda (p1 p2) (tag (mul-poly p1 p2))))
       (put 'add '(poly-dense poly-dense) (lambda (p1 p2) (tag (add-poly p1 p2))))
       (put 'make 'poly-dense (lambda (var terms) (tag (make-poly var terms))))
       'done)
+    (install-dense-poly)
 
+    (define (make-dense-poly var terms)
+      ((get 'make 'poly-dense) var terms))
+
+    (define (mul-dense-poly p1 p2)
+      ((get 'mul '(poly-dense poly-dense)) p1 p2))
+
+    (define my-dense-poly-1 (make-dense-poly 'x (list 1 2)))
+    (define my-dense-poly-2 (make-dense-poly 'x (list 1 2)))
 
 )
 
