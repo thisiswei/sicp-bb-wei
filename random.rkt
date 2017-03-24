@@ -2276,10 +2276,10 @@
     ; 2.89
     ; representation for dense poly
     (define (install-dense-poly)
-      (define (make-poly variable term-list)
-        (cons variable term-list))
-      (define (term-list p) (car p))
-      (define (variable p) (cdr p))
+      (define (make-poly v term-list)
+        (cons v term-list))
+      (define (variable p) (car p))
+      (define (term-list p) (cdr p))
 
       (define (add-poly p1 p2)
         (if (same-variable? (variable p1) (variable p2))
@@ -2310,13 +2310,11 @@
               ((> (length term-L1) (length term-L2))
                (adjoin-terms (car term-L1)
                              (add-term (cdr term-L1) term-L2)))
-              ((< (length (term-L1) (length term-L2)))
+              ((< (length term-L1) (length term-L2))
                (adjoin-terms (car term-L2)
                              (add-term term-L1 (cdr term-L2))))
               (else (adjoin-terms
-                      (generic-add
-                        (car term-L1)
-                        (car term-L2))
+                      (generic-add (car term-L1) (car term-L2))
                       (add-term (cdr term-L1) (cdr term-L2))))))
 
       (define empty-termlist? null?)
@@ -2340,21 +2338,26 @@
           (* (to-number term-L1)
              (to-number term-L2))))
 
-      (define (tag x) (attach-tag 'poly-dense p))
+      (define (tag x) (attach-tag 'poly-dense x))
       (put 'mul '(poly-dense poly-dense) (lambda (p1 p2) (tag (mul-poly p1 p2))))
       (put 'add '(poly-dense poly-dense) (lambda (p1 p2) (tag (add-poly p1 p2))))
       (put 'make 'poly-dense (lambda (var terms) (tag (make-poly var terms))))
       'done)
     (install-dense-poly)
 
+    ; TODO aint working yet
     (define (make-dense-poly var terms)
       ((get 'make 'poly-dense) var terms))
 
     (define (mul-dense-poly p1 p2)
       ((get 'mul '(poly-dense poly-dense)) p1 p2))
 
-    (define my-dense-poly-1 (make-dense-poly 'x (list 1 2)))
-    (define my-dense-poly-2 (make-dense-poly 'x (list 1 2)))
+    (define (add-dense-poly p1 p2)
+      ((get 'add '(poly-dense poly-dense)) p1 p2))
+
+    (define my-dense-poly-1 (make-dense-poly 'x (list (make-scheme-number 4) (make-scheme-number 2))))
+    (define my-dense-poly-2 (make-dense-poly 'x (list (make-scheme-number 3) (make-scheme-number 2))))
+    ; (apply-very-generic 'add my-dense-poly-2 my-dense-poly-1)
 
 )
 
