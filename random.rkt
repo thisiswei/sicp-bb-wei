@@ -2389,7 +2389,15 @@
 
     ;2.91 -- 2.97 skipped
 
+    ; 3.1.1
 
+    (define balance 100)
+    (define (withdraw amt)
+      (if (<= amt balance)
+        (begin
+          (set! balance (- balance amt))
+          balance)
+        (error "insufficient fund")))
 
 
 )
