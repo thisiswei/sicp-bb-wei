@@ -2325,22 +2325,6 @@
       (define (rest-term termlist) (cdr termlist))
       (define (head-term termlist) (car termlist))
 
-      ; (define (mul-term term-L1 term-L2)
-
-      ;   ; 12 -> '(1 2)
-      ;   (define (to-pairs n)
-      ;     (if (= n 0)
-      ;       null
-      ;       (append (to-pairs (quotient n 10)) (list (remainder n 10)))))
-
-      ;   ; '(1 2) -> 12
-      ;   (define (to-number pairs)
-      ;     (my-accumulate-fold-left (lambda (z x) (+ (* z 10) x)) 0 pairs))
-
-      ;   (to-pairs
-      ;     (* (to-number term-L1)
-      ;        (to-number term-L2))))
-
       ; confirmed mul-helper is function properly
       (define (mul-helper elem t2)
         (if (null? t2)
@@ -2352,19 +2336,19 @@
         (if (null? t1)
           null
           (add-term
-            (mul-helper (car t1) t2)
+            (append-zero (mul-helper (car t1) t2) (length t1))
             (mul-term (cdr t1) t2))))
+
+      (define (append-zero t l)
+        (if (= l 1)
+          t
+          (append (append-zero t (- l 1))
+                  (list (make-scheme-number 0)))))
 
       (define (tag x) (attach-tag 'poly-dense x))
       (put 'mul '(poly-dense poly-dense) (lambda (p1 p2) (tag (mul-poly p1 p2))))
       (put 'add '(poly-dense poly-dense) (lambda (p1 p2) (tag (add-poly p1 p2))))
       (put 'make 'poly-dense (lambda (var terms) (tag (make-poly var terms))))
-
-
-      (newline)
-      (display (mul-helper (make-scheme-number 2) (list  (make-scheme-number 3) (make-scheme-number 4))))
-      (newline)
-
       'done)
     (install-dense-poly)
 
@@ -2391,14 +2375,18 @@
 
     (define my-dense-poly-4
       (make-dense-poly
-        'x 
-        (list (make-scheme-number 6) 
+        'x
+        (list (make-scheme-number 6)
               (make-scheme-number 4))))
 
-    ; (display my-dense-poly-1)
-    ; (display my-dense-poly-2)
-    ; (apply-very-generic 'add my-dense-poly-2 my-dense-poly-1)
-    ; (apply-very-generic 'mul my-dense-poly-2 my-dense-poly-1)
+    ; "random.rkt"> (apply-very-generic 'mul my-dense-poly-3 my-dense-poly-4)
+    ; '(poly-dense
+    ; x
+    ; (scheme-number . 72)
+    ; (scheme-number . 96)
+    ; (scheme-number . 32)
+    ; (scheme-number . 0))
+
 
 )
 
