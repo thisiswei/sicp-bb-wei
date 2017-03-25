@@ -2399,6 +2399,21 @@
           balance)
         (error "insufficient fund")))
 
+    (define new-withdraw
+      (let ((a-balance 100))
+        (lambda (amt)
+          (if (>= a-balance amt)
+            (begin
+              (set! a-balance (- a-balance amt))
+              a-balance)
+            "insufficient fund"))))
 
+    (define (another-new-withdraw amt)
+      (let ((a-balance 100))
+        (if (>= a-balance amt)
+          (begin
+            (set! a-balance (- a-balance amt))
+              a-balance)
+            "insufficient fund")))
 )
 
