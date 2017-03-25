@@ -2415,5 +2415,33 @@
             (set! a-balance (- a-balance amt))
               a-balance)
             "insufficient fund")))
+
+    (define (make-withdraw balance)
+      (lambda (amt)
+        (if (>= balance amt)
+          (begin
+            (set! balance (- balance amt))
+            balance)
+          "insufficient fund")))
+
+    (define (make-account balance)
+      (define (withdraw amt)
+        (if (>= balance amt)
+          (begin
+            (set! balance (- balance amt))
+            balance)
+          "insufficient fund"))
+
+      (define (deposit amt)
+        (begin
+          (set! balance (+ balance amt))
+          balance))
+
+      (define (dispatch m)
+        (cond ((eq? m 'deposit) deposit)
+              ((eq? m 'withdraw) withdraw)
+              (else (error "Error"))))
+
+      dispatch)
 )
 
