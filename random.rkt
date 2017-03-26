@@ -2503,5 +2503,28 @@
 
       dispath)
 
+
+    ; 3.4 bingbing
+    (define (make-account-bb init pw)
+      (define (deposit amt)
+        (begin
+          (set! init (+ init amt))
+          init))
+
+      (define (withdraw amt)
+        (if (>= init amt)
+          (begin
+            (set! init (- init amt))
+            init)
+          (error "Insufficient amount")))
+
+      (let ((counter 0))
+        (define (dispath my-pw m)
+          (cond ((and (eq? m 'withdraw) (eq? my-pw pw)) withdraw)
+                ((and (eq? m 'deposit) (eq? my-pw pw)) deposit)
+                ((>= counter 2) (error "call-the-cop"))
+                (else (begin (set! counter (+ counter 1))
+                             (error "wrong password")))))
+        dispath))
 )
 
