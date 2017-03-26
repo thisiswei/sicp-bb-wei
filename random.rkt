@@ -2546,14 +2546,47 @@
     ; (define (monte-carlo trials)
     ;   (run-experiment trials monte-carlo-test))
 
-    ; (define (run-experiment trails experiment)
-    ;   (define (iter trails-remain trail-passes)
-    ;     (if (= trails-remain 0)
-    ;       (/ trail-passes trails)
+    ; (define (run-experiment trials experiment)
+    ;   (define (iter trials-remain trial-passes)
+    ;     (if (= trials-remain 0)
+    ;       (/ trail-passes trials)
     ;       (cond ((experiment)
-    ;              (iter (- 1 trails-remain) (+ 1 trail-passes)))
+    ;              (iter (- 1 trials-remain) (+ 1 trial-passes)))
     ;             (else
-    ;               (iter (- 1 trails-remain) trail-passes)))))
-    ;   (iter trails 0))
+    ;               (iter (- 1 trials-remain) trial-passes)))))
+    ;   (iter trials 0))
+
+    ; 3.5
+    (define (random-in-range lo hi)
+      (let ((range (- hi lo)))
+        (+ lo (* (random) range))))
+
+    (define (estimate-integral p x1 x2 y1 y2 trials)
+      (define (test)
+        (let ((x (random-in-range x1 x2))
+              (y (random-in-range y1 y2)))
+          (p x y)))
+      (let ((probability (monte-carlo-integral trials test))
+            (area (abs (* (- x2 x1) (- y2 y1)))))
+        (* probability area)))
+
+    (define (monte-carlo-integral trials experiment)
+      (define (iter remains passes)
+        (cond ((= remains 0) (/ passes trials))
+              ((experiment)
+               (iter (- remains 1)
+                     (+ passes 1)))
+              (else (iter (- remains 1)
+                          passes))))
+      (iter trials 0))
+
+    (/
+      (estimate-integral
+        (lambda (x y)
+          (<= (+ (square (- x 5)) (square (- y 7)))
+              (square 3)))
+        2.0 8.0 4.0 10.0 3000)
+      (square 3))
+
 )
 
