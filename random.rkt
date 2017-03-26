@@ -2526,5 +2526,34 @@
                 (else (begin (set! counter (+ counter 1))
                              (error "wrong password")))))
         dispath))
+
+    ; (random)
+    ; (define random
+    ;   (let ((val 10))
+    ;     (lambda ()
+    ;       (begin
+    ;         (set! val (rand-update val))
+    ;         val))))
+
+    ; (define (estimate-pi trials)
+    ;   (sqrt (/ 6 (monte-carlo trials))))
+
+    ;  this (random) is not exactly (rand)
+
+    ; (define (monte-carlo-test)
+    ;   (= (gcd (random) (random)) 1))
+
+    ; (define (monte-carlo trials)
+    ;   (run-experiment trials monte-carlo-test))
+
+    ; (define (run-experiment trails experiment)
+    ;   (define (iter trails-remain trail-passes)
+    ;     (if (= trails-remain 0)
+    ;       (/ trail-passes trails)
+    ;       (cond ((experiment)
+    ;              (iter (- 1 trails-remain) (+ 1 trail-passes)))
+    ;             (else
+    ;               (iter (- 1 trails-remain) trail-passes)))))
+    ;   (iter trails 0))
 )
 
