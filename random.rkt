@@ -2479,5 +2479,29 @@
                           res)))))
         dispatch))
 
+
+    ; 3.3
+    (define (make-account-with-pw init pw)
+      (define (deposit amt)
+        (begin
+          (set! init (+ init amt))
+          init))
+
+      (define (withdraw amt)
+        (if (>= init amt)
+          (begin
+            (set! init (- init amt))
+            init)
+          (error "Insufficient amount")))
+
+      (define (dispath my-pw m)
+        (if (eq? pw my-pw)
+          (cond ((eq? 'deposit m) deposit)
+                ((eq? 'withdraw m) withdraw)
+                (else (error "unknown operation")))
+          (error "Incorrect password")))
+
+      dispath)
+
 )
 
