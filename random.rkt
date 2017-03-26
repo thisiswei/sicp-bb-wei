@@ -2459,5 +2459,25 @@
         (begin (set! val (+ adden val))
                val)))
 
+    ; 3.2
+    ; (define s (make-monitored sqrt))
+    ; (s 100)
+    ; 10
+    ; (s 'how-many-calls?)
+    ; 1
+    ; (s 'reset-count)
+    ; 0
+
+    (define (make-monitored f)
+      (let ((counter 0))
+        (define (dispatch m)
+          (cond ((eq? m 'how-many-calls?) counter)
+                ((eq? m 'reset-count) (begin (set! counter 0) counter))
+                (else (let ((res (f m)))
+                        (begin
+                          (set! counter (+ counter 1))
+                          res)))))
+        dispatch))
+
 )
 
