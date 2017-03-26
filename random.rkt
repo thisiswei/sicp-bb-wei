@@ -2443,5 +2443,21 @@
               (else (error "Error"))))
 
       dispatch)
+
+
+    ; 2017-03-26
+    ; 3.1
+    (define (make-accumulator init)
+      (define (make-acc amt)
+        (begin
+          (set! init (+ amt init))
+          init))
+      make-acc)
+
+    (define (make-accumulator-bb val)
+      (lambda (adden)
+        (begin (set! val (+ adden val))
+               val)))
+
 )
 
