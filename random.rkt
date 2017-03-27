@@ -2588,5 +2588,31 @@
         2.0 8.0 4.0 10.0 3000)
       (square 3))
 
+
+    ; 2017-03-27
+    ; 3.6
+
+    ; (random)
+    ; (define random
+    ;   (let ((val 10))
+    ;     (lambda ()
+    ;       (begin
+    ;         (set! val (rand-update val))
+    ;         val))))
+
+    ; (define (my-rand)
+    ;   (let ((x random-init))
+    ;     (define (random-random)
+    ;       (begin
+    ;         (set! x (rand-update x))
+    ;         x))
+
+    ;     (define (dispatch m)
+    ;       (cond ((eq? m 'generate) random-random)
+    ;             ((eq? m 'reset) (lambda (new-val)
+    ;                               (begin (set! x new-val)
+    ;                                      x)))))
+    ;       dispatch))
+
 )
 
