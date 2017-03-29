@@ -2527,6 +2527,28 @@
                              (error "wrong password")))))
         dispath))
 
+    ; would this work?
+    ; (define (make-account-bb-2 init pw)
+
+    ;   (define (balance) init)
+    ;   (define (deposit amt)
+    ;     (make-account-bb-2 (+ init amt) pw))
+
+    ;   (define (withdraw amt)
+    ;     (if (>= init amt)
+    ;       (make-account-bb-2 (- init amt) pw)
+    ;       (error "Insufficient amount")))
+
+    ;   (let ((counter 0))
+    ;     (define (dispath my-pw m)
+    ;       (cond ((and (eq? m 'withdraw) (eq? my-pw pw)) withdraw)
+    ;             ((and (eq? m 'deposit) (eq? my-pw pw)) deposit)
+    ;             ((and (eq? m 'balance) (eq? my-pw pw)) (balance))
+    ;             ((>= counter 2) (error "call-the-cop"))
+    ;             (else (begin (set! counter (+ counter 1))
+    ;                          (error "wrong password")))))
+    ;     dispath))
+
     ; (random)
     ; (define random
     ;   (let ((val 10))
