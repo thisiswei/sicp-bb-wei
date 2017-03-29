@@ -2614,5 +2614,23 @@
     ;                                      x)))))
     ;       dispatch))
 
+    ; 3.7
+    (define (make-joint existing-account pw new-pw)
+
+      (define (deposit amt)
+        ((existing-account pw 'deposit) amt))
+
+      (define (withdraw amt)
+        ((existing-account pw 'withdraw) amt))
+
+      (define (dispatch my-pw m)
+        (cond ((and (eq? m 'withdraw) (eq? my-pw new-pw)) withdraw)
+              ((and (eq? m 'deposit) (eq? my-pw new-pw)) deposit)
+              (else (error "wrong password"))))
+      dispatch)
+
+    (define bb-account (make-account-bb 100 'bb-pw))
+    (define wei-account (make-joint bb-account 'bb-pw 'wei-pw))
+
 )
 
