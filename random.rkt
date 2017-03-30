@@ -2647,5 +2647,28 @@
     (define bb-account (make-account-bb 100 'bb-pw))
     (define wei-account (make-joint bb-account 'bb-pw 'wei-pw))
 
+    ; 2017-03-30
+
+    ; define a simple procedue f such that
+    ; (+ (f 0) (f 1)) => 0 if evaludated from left to right
+    ; (+ (f 0) (f 1)) => 1 if evaludated from right to left
+
+    ; 3.8
+    (define my-f
+      (let ((p 1)
+            (s 0))
+        (lambda (v)
+          (begin
+            (set! s (* p v))
+            (set! p v)
+            s))))
+
+    (define my-f-b
+      (let ((p 1))
+        (lambda (num)
+          (begin
+            (set! p (* p num))
+            p))))
+
 )
 
