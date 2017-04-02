@@ -2670,5 +2670,13 @@
             (set! p (* p num))
             p))))
 
+    ; 2017-04-01
+    ; (define (my-cons x y)
+    ;   (let ((pairs (get-new-pair)))
+    ;     (set-car! pairs x)
+    ;     (set-cdr! pairs y)
+    ;     pairs))
+
+
 )
 
