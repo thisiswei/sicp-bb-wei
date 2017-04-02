@@ -2677,6 +2677,15 @@
     ;     (set-cdr! pairs y)
     ;     pairs))
 
-
+    ;3.17
+    (define (count-pairs p)
+      (let ((counted null))
+        (define (count-helper x)
+          (if (or (not (pair? x)) (memq x counted))
+            0
+            (begin
+              (set! counted (cons p counted))
+              (+ 1 (count-helper (car x)) (count-helper (cdr x))))))
+        (count-helper p)))
 )
 
