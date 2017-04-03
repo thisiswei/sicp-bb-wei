@@ -2687,5 +2687,16 @@
               (set! counted (cons p counted))
               (+ 1 (count-helper (car x)) (count-helper (cdr x))))))
         (count-helper p)))
+
+    ; 2017-04-03
+    ; 3.18 3.19
+    (define (has-cycle a-list)
+      (define (helper f s)
+        (if (null? (cdr f))
+          #f
+          (or (eq? (cadr p) (car p))
+              (helper (cddr f) (cdr s)))))
+      (helper a-list a-list))
+
 )
 
