@@ -2716,6 +2716,69 @@
     (define (my-set-car! z v) ((z 'set-car!) v) z)
     (define (my-set-cdr! z v) ((z 'set-cdr!) v) z)
 
+    (define (my-set-car-2! z v)
+      (define new (cons v (cdr z)))
+      (set! z new)
+      new)
 
+    (define (my-set-cdr-2! z v)
+      (define new (cons (car z) v))
+      (set! z new)
+      new)
+
+
+    ; 2017-04-05
+    ; FIFO queue
+    (define (front-ptr queue) (mcar queue))
+
+    (define (rear-ptr queue) (mcdr queue))
+
+    (define (make-queue) (mcons null null))
+
+    (define (set-front! queue item)
+      (set-mcar! queue item))
+
+    (define (set-rear! queue item)
+      (set-mcdr! queue item))
+
+    (define (empty-queue? queue)
+      (null? (front-ptr queue)))
+
+    (define (front-queue queue)
+      (if (empty-queue? queue)
+        (error "empty queue" queue)
+        (car (front-ptr queue))))
+
+    (define (insert-queue! queue item)
+      (let ((new-pair (mcons item null)))
+        (cond ((empty-queue? queue)
+               (set-front! queue new-pair)
+               (set-rear! queue new-pair)
+               queue)
+
+              (else (set-mcdr! (rear-ptr queue) new-pair)
+                    (set-rear! queue new-pair)
+                    queue))))
+
+    (define (delete-queue! queue)
+      (cond ((empty-queue? queue) (error "empty!" queue))
+            (else (set-front! queue (cdr (front-ptr queue)))
+                  queue)))
+
+    (define q1 (make-queue))
+    (insert-queue! q1 'a)
+    (insert-queue! q1 'b)
+    (insert-queue! q1 'c)
+    ; (delete-queue! q1)
+    ; (delete-queue! q1)
+
+    (define (display-queue queue)
+      (define (display-helper node)
+          (if (null? node)
+            (newline)
+            (begin
+              (display (mcar node))
+              (display-helper (mcdr node)))))
+      (display-helper (mcar queue)))
 )
 
