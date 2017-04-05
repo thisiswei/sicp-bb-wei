@@ -2698,5 +2698,24 @@
               (helper (cddr f) (cdr s)))))
       (helper a-list a-list))
 
+
+
+    ; 2017-04-04
+    (define (my-cons-2 x y)
+      (define (set-x! v) (set! x v))
+      (define (set-y! v) (set! y v))
+      (define (dispatch m)
+        (cond ((eq? m 'car) x)
+              ((eq? m 'cdr) y)
+              ((eq? m 'set-car!) set-x!)
+              ((eq? m 'set-cdr!) set-y!)))
+      dispatch)
+
+    (define (my-car-2 z) (z 'car))
+    (define (my-cdr-2 z) (z 'cdr))
+    (define (my-set-car! z v) ((z 'set-car!) v) z)
+    (define (my-set-cdr! z v) ((z 'set-cdr!) v) z)
+
+
 )
 
