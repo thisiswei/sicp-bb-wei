@@ -2780,5 +2780,56 @@
               (display (mcar node))
               (display-helper (mcdr node)))))
       (display-helper (mcar queue)))
+
+
+    ; 2017-04-07
+    ; 3.22
+    (define (make-my-queue)
+      (let ((front-ptr null)
+            (rear-ptr null))
+
+        (define (set-front! v)
+          (set! front-ptr v) v)
+
+        (define (set-rear! v)
+          (set! rear-ptr v) v)
+
+        (define (empty-queue?)
+          (null? front-ptr))
+
+        (define (front-queue)
+          (if (empty-queue?)
+            (error "empty")
+            (car front-ptr)))
+
+        (define (insert-queue! item)
+          (let ((new-pair (mcons item null)))
+            (if (empty-queue?)
+              (begin (set-front! new-pair)
+                     (set-rear! new-pair))
+
+              (begin (set-mcdr! rear-ptr new-pair)
+                     (set-rear! new-pair)))))
+
+       (define (delete-queue!)
+         (if (empty-queue?)
+           (error "empty!")
+           (begin (set-front! (cdr (front-ptr))))))
+
+        (define (dispatch m)
+          (cond ((eq? m 'set-front!) set-front!)
+                ((eq? m 'set-rear!) set-rear!)
+                ((eq? m 'empty-queue?) (empty-queue?))
+                ((eq? m 'front-queue) (front-queue))
+                ((eq? m 'insert-queue) insert-queue!)
+                ((eq? m 'delete-queue! (delete-queue!)))))
+        dispatch))
+
+    ; (define Q (make-queue))
+    ; (Q 'set-front! v)
+
+    ; (define (set-front! q v)
+    ;   (q 'set-front! v))
+
 )
 
