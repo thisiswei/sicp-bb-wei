@@ -2831,5 +2831,82 @@
     ; (define (set-front! q v)
     ;   (q 'set-front! v))
 
+    ; 2017-04-08 3.23
+    (define (make-deque)
+      (let ((front-ptr-front null)
+            (front-ptr-back null))
+
+        (define (empty-deque?)
+          (and (null? front-ptr-front)
+               (null? front-ptr-back)))
+
+        (define (front-deque)
+          (car front-ptr-front))
+
+        (define (rear-deque)
+          (car front-ptr-back))
+
+        (define (front-insert-deque! v)
+          (let ((pair (mcons v front-ptr-front)))
+            (set! front-ptr-front pair)))
+
+        (define (rear-insert-deque! v)
+          (let ((pair (mcons v front-ptr-back)))
+            (set! front-ptr-back pair)))
+
+        (define (front-delete-deque!)
+          (if (empty-deque?)
+            (error "empty deque")
+            (let ((next (mcdr front-ptr-front)))
+              (set! front-ptr-front next))))
+
+        (define (rear-delete-deque!)
+          (if (empty-deque?)
+            (error "empty deque")
+            (let ((next (mcdr front-ptr-back)))
+              (set! front-ptr-back next))))
+
+        (define (print-deque)
+          (define (print-front node)
+            (if (null? node)
+              (newline)
+              (begin
+                (display (mcar node))
+                (newline)
+                (print-front (mcdr node)))))
+
+          (define (print-back node)
+            (if (null? node)
+              (newline)
+              (begin
+                (print-back (mcdr node))
+                (display (mcar node))
+                (newline))))
+
+          (print-front front-ptr-front)
+          (print-back front-ptr-back))
+
+        (define (dispatch m)
+          (cond ((eq? m 'front-deque) (front-deque))
+                ((eq? m 'rear-deque) (rear-deque))
+                ((eq? m 'front-insert-deque!) front-insert-deque!)
+                ((eq? m 'rear-insert-deque!) rear-insert-deque!)
+                ((eq? m 'rear-delete-deque!) (rear-delete-deque!))
+                ((eq? m 'front-delete-deque!) (front-delete-deque!))
+                ((eq? m 'print-deque) (print-deque))))
+        dispatch))
+
+    ; test the make-deque
+    ; (define deQ (make-deque))
+    ; ((deQ 'front-insert-deque!) 2)
+    ; ((deQ 'front-insert-deque!) 3)
+    ; (deQ 'print-deque)
+    ; ((deQ 'rear-insert-deque!) 4)
+    ; ((deQ 'rear-insert-deque!) 5)
+    ; (deQ 'print-deque)
+    ; (deQ 'front-delete-deque!)
+    ; (deQ 'print-deque)
+    ; (deQ 'rear-delete-deque!)
+
 )
 
