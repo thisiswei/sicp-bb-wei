@@ -2772,14 +2772,15 @@
     ; (delete-queue! q1)
     ; (delete-queue! q1)
 
-    (define (display-queue queue)
+    (define (display-queue)
       (define (display-helper node)
           (if (null? node)
             (newline)
             (begin
               (display (mcar node))
-              (display-helper (mcdr node)))))
-      (display-helper (mcar queue)))
+              (display-helper (mcdr (mcdr node))))))
+
+      (display-helper (front-queue)))
 
 
     ; 2017-04-07
@@ -2841,7 +2842,9 @@
                (null? front-ptr-back)))
 
         (define (front-deque)
-          (car front-ptr-front))
+          (if (empty-deque?)
+            (error "empty!")
+            (car front-ptr-front)))
 
         (define (rear-deque)
           (car front-ptr-back))
@@ -2908,5 +2911,93 @@
     ; (deQ 'print-deque)
     ; (deQ 'rear-delete-deque!)
 
+    ; 2017-04-09
+    ; doubly linked list style
+    ; 3.23 WIP
+    ; (define (make-doubly-linked-deque)
+
+    ;   (define front-ptr null)
+    ;   (define rear-ptr null)
+
+    ;   (define (empty-deque?)
+    ;     (null? front-ptr))
+
+    ;   (define (make-node v)
+    ;     (mcons v (mcons null null)))
+
+    ;   (define (set-prev! node newNode)
+    ;     (set-mcar! (mcdr node) newNode))
+
+    ;   (define (set-next! node newNode)
+    ;     (set-mcdr! (mcdr node) newNode))
+
+    ;   (define (front-deque)
+    ;     (if (empty-deque?)
+    ;       (error "empty!")
+    ;       (mcar front-ptr)))
+
+    ;   (define (rear-deque)
+    ;     (if (empty-deque?)
+    ;       (error "empty!")
+    ;       (mcar rear-ptr)))
+
+    ;   (define (front-insert-deque! v)
+    ;     (let ((node (make-node v)))
+    ;       (if (empty-deque?)
+    ;         (begin
+    ;           (set! front-ptr node)
+    ;           (set! rear-ptr node))
+    ;         (begin
+    ;           (set-next! node (front-deque))
+    ;           (set! front-ptr node)))))
+
+    ;   ; rear-insert is not working
+    ;   (define (rear-insert-deque! v)
+    ;     (let ((node (make-node v)))
+    ;       (if (empty-deque?)
+    ;         (begin
+    ;           (set! front-ptr (mcons node null))
+    ;           (set! rear-ptr (mcons node null)))
+    ;         (begin
+    ;           (set-prev! node (rear-deque))
+    ;           (set-next! (rear-deque) (mcons node null))
+    ;           (set! rear-ptr (mcons node null))))))
+
+    ;   (define (front-delete-deque!)
+    ;     (let ((next-node (mcdr (mcdr (front-deque)))))
+    ;       (set! front-ptr next-node)))
+
+    ;   (define (rear-delete-deque!)
+    ;     (let ((prev-node (mcar (mcdr (rear-deque)))))
+    ;       (set! rear-ptr prev-node)))
+
+    ;   (define (print-deque)
+    ;     (define (print-helper node)
+    ;       (if (null? node)
+    ;         (newline)
+    ;         (begin
+    ;           (display (mcar node))
+    ;           (print-helper (mcdr (mcdr node))))))
+
+    ;     (print-helper front-ptr))
+
+    ;   (define (dispatch m)
+    ;     (cond ((eq? m 'front-deque) (front-deque))
+    ;           ((eq? m 'rear-deque) (rear-deque))
+    ;           ((eq? m 'front-insert-deque!) front-insert-deque!)
+    ;           ((eq? m 'rear-insert-deque!) rear-insert-deque!)
+    ;           ((eq? m 'rear-delete-deque!) (rear-delete-deque!))
+    ;           ((eq? m 'front-delete-deque!) (front-delete-deque!))
+    ;           ((eq? m 'print-deque) (print-deque))))
+
+    ;   dispatch)
+
+    ; ; test the make-deque
+    ; (define deQ2 (make-doubly-linked-deque))
+    ; ((deQ2 'front-insert-deque!) 2)
+    ; ((deQ2 'front-insert-deque!) 3)
+    ; ((deQ2 'front-insert-deque!) 4)
+    ; ((deQ2 'rear-insert-deque!) 5)
+    ; (deQ2 'print-deque)
 )
 
