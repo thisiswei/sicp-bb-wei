@@ -2999,5 +2999,25 @@
     ; ((deQ2 'front-insert-deque!) 4)
     ; ((deQ2 'rear-insert-deque!) 5)
     ; (deQ2 'print-deque)
+
+    ; 2017-04-10 -- 2017-04-11
+    (define (lookup key table)
+      (let ((res (assoc key (mcdr table))))
+        (if res
+          (mcdr res)
+          #f)))
+
+
+    (define (my-assoc key records)
+      (if (null? records)
+        #f
+        (let ((record (mcar records)))
+          (let ((k (mcar record)))
+            (if (eq? key k)
+              record
+              (my-assoc key (mcdr records)))))))
+
+
+
 )
 
