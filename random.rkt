@@ -3027,5 +3027,28 @@
             (set-mcdr! table (mcons (mcons key value) (cdr table)))
             table))))
 
+    ; 3.23
+    (define (lookup-2 key-1 key-2 table)
+      (let ((t (my-assoc key-1 (cdr table))))
+        (if t
+          (lookup key-2 t)
+          #f)))
+
+    (define (my-assoc-2 key-1 key-2 table)
+      (if (null? table)
+        #f
+        (let ((t (my-assoc key-1 (cdr table))))
+          (if t
+            (my-assoc key-2 t)
+            #f))))
+
+    (define (insert-2! key-1 key-2 value table)
+      (let ((record (my-assoc-2 key-1 key-2 table)))
+        (if record
+          (set-mcdr! record value)
+          (let ((to-insert (mcons key-1 (mcons (mcons key-2 value) null))))
+            (set-mcdr! table (mcons (cdr table) to-insert))))))
+
+
 )
 
