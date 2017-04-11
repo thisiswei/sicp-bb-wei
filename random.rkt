@@ -3017,7 +3017,15 @@
               record
               (my-assoc key (mcdr records)))))))
 
-
+    (define (insert! key value table)
+      (let ((record (my-assoc key (cdr table))))
+        (if record
+          (begin
+            (set-mcdr! record value)
+            table)
+          (begin
+            (set-mcdr! table (mcons (mcons key value) (cdr table)))
+            table))))
 
 )
 
