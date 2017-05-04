@@ -3049,6 +3049,34 @@
           (let ((to-insert (mcons key-1 (mcons (mcons key-2 value) null))))
             (set-mcdr! table (mcons (cdr table) to-insert))))))
 
+    ; 2017-05-04 back coding again after 20 days
+    (define (make-table)
+      (let ((local-table (list '*table*)))
+        (define (lookup k1 k2)
+          (let ((subtable (my-assoc k1 (mcdr local-table))))
+            (if subtable
+              (let ((res (my-assoc k2 subtable)))
+                (if res (mcar res) #f))
+              #f)))
+        (define (insert k1 k2 v)
+          (let ((subtable (my-assoc k1 (mcdr local-table))))
+            (if subtable
+              (let ((record (my-assoc k2 subtable)))
+                (if record
+                  (set-mcdr! record v)
+                  (set-mcdr! subtable (mcons (mcons k2 v) (cdr subtable)))))
+              (set-mcdr! local-table
+                         (mcons (list k1 (mcons k2 v))
+                                (mcdr local-table))))))
+        (define (dispatch m)
+          (cond ((eq? m 'lookup) lookup)
+                ((eq? m 'insert) insert!)
+                (else (error "hey wrong"))))
+        dispatch))
+
+    (define operation-table (make-table))
+    (define my-get (operation-table 'lookup))
+    (define my-put (operation-table 'insert))
 
 )
 
