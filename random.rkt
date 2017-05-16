@@ -3078,5 +3078,22 @@
     (define my-get (operation-table 'lookup))
     (define my-put (operation-table 'insert))
 
+
+    ; 3.24
+    ; (define (make-table-same-key? same-key?)
+      ; you could just replace the assoc function
+      ; and copy the old code over!
+      ; (let ((local-table (list '*table*)))
+      ;   (define (lookup k1 k2)
+      ;     (let ((subtable (lookup-helper k1 (mcdr local-table))))
+      ;       (if subtable
+      ;         (let ((res (lookup-helper k2 subtable)))
+      ;           (if res (mcar res) #f))
+      ;         #f)))
+
+
+
+
+
 )
 
