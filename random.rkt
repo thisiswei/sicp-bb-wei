@@ -3091,6 +3091,48 @@
       ;           (if res (mcar res) #f))
       ;         #f)))
 
+    ; 2017-05-18:
+
+    ; 3.27
+    (define (memoize f)
+      (let ((table make-table))
+        (lambda (x)
+          (let ((prevs-result (lookup table x)))
+            (or prevs-result
+                (let ((v (f x)))
+                  (insert! table x v)
+                  v))))))
+
+
+
+    ; (define (half-adder a b)
+    ;   (let ((d (or-gate a b))
+    ;         (tmp (and-gate a b)))
+    ;     (let ((e (invert-gate tmp)))
+    ;       (and-gate d e)
+    ;       tmp)))
+
+    ; (define (full-adder a b c-in sum c-out)
+    ;   (let ((x-left (make-wire))
+    ;         (x-right (make-wire))
+    ;         (x-long (make-wire)))
+    ;     (half-adder b c-in x1 x-long)
+    ;     (half-adder a x-left sum x-right)
+    ;     (or-gate x-right x-long c-out)
+    ;     'ok))
+
+    ; 3.28
+    (define (or-gate a1 a2 output)
+      (define (or-gate-proc)
+        (let (new-value (or (get-signal a1) (get-signal a2)))
+          (after-delay
+            or-gate-deply
+            (lambda () (set-signal! output new-value)))))
+      (add-action! a1 or-gate-proc)
+      (add-action! a2 or-gate-proc)
+      'ok)
+
+
 
 
 
