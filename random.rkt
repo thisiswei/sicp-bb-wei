@@ -3122,15 +3122,16 @@
     ;     'ok))
 
     ; 3.28
-    (define (or-gate a1 a2 output)
-      (define (or-gate-proc)
-        (let (new-value (or (get-signal a1) (get-signal a2)))
-          (after-delay
-            or-gate-deply
-            (lambda () (set-signal! output new-value)))))
-      (add-action! a1 or-gate-proc)
-      (add-action! a2 or-gate-proc)
-      'ok)
+    ; have to comment out since the set-signal is not available
+    ; (define (or-gate a1 a2 output)
+    ;   (define (or-gate-proc)
+    ;     (let (new-value (or (get-signal a1) (get-signal a2)))
+    ;       (after-delay
+    ;         or-gate-deply
+    ;         (lambda () (set-signal! output new-value)))))
+    ;   (add-action! a1 or-gate-proc)
+    ;   (add-action! a2 or-gate-proc)
+    ;   'ok)
 
     ; (skipped) A Simulator for Digital Circuits
     ; (skipped) Propagation of Constraints
