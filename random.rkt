@@ -3132,6 +3132,24 @@
       (add-action! a2 or-gate-proc)
       'ok)
 
+    ; (skipped) A Simulator for Digital Circuits
+    ; (skipped) Propagation of Constraints
+
+
+    ; 2017-05-30
+    ; (define (make-serializer)
+    ;   (let ((mutex make-mutex))
+    ;     (lambda (p)
+    ;       (define (serialized-p . args)
+    ;         (mutex 'acuquire)
+    ;         (let ((val (apply p args)))
+    ;           (mutex 'release)
+    ;           val))
+    ;       serialized-p)))
+
+
+
+
 
 
 
