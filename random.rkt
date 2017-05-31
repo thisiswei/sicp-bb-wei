@@ -3177,5 +3177,29 @@
             (begin (set-mcar! cell #t) #f)))
         dispath))
 
+
+    ; 3.47
+    (define (semaphore n)
+      (let ((count n)
+            (lock (make-mutex)))
+
+        (define (dispatch m)
+          (cond ((eq? m 'acquire) acuqire)
+                ((eq? m 'release) release)))
+
+        (define (acuqire)
+          (lock 'acquire)
+          (begin
+            (if (<= count 0)
+              (dispatch 'acquire)
+              (set! count (- count 1)))
+            (lock 'release))
+
+        (define (release)
+          (lock 'acuqire)
+          (set! count (+ count 1))
+          (lock 'release))
+
+        dispatch))
 )
 
