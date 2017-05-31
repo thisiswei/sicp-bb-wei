@@ -3149,12 +3149,33 @@
     ;       serialized-p)))
 
 
+    ; (define (make-mutex)
+    ;   (let ((the-list (list #f)))
+    ;     (define (accuqire)
+    ;       (let ((cell (car the-list)))
+    ;         (cond ((eq? cell #t) (begin (sleep 0.1) accuqire)
+    ;               (else (setmcar! the-list #t))))))
 
+    ;     (define (release)
+    ;       (setmcar! the-list #f))
 
+    ;     (define (dispath m)
+    ;       (cond ((eq? m 'acuqire) accuqire)
+    ;             ((eq? m 'release) release)))
 
+    ;   dispath))
 
-
-
+    ; 2017-05-31
+    (define (make-mutex)
+      (let ((cell (list false)))
+        (define (dispath m)
+          (cond ((eq? m 'acquire) (if (test-set!) (dispath 'acquire) 'ok))
+                ((eq? m 'release) (set-mcar! cell #f))))
+        (define (test-set!)
+          (if (mcar cell)
+            #t
+            (begin (set-mcar! cell #t) #f)))
+        dispath))
 
 )
 
