@@ -3193,7 +3193,7 @@
             (if (<= count 0)
               (dispatch 'acquire)
               (set! count (- count 1)))
-            (lock 'release))
+            (lock 'release)))
 
         (define (release)
           (lock 'acuqire)
