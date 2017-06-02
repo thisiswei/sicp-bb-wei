@@ -3201,5 +3201,17 @@
           (lock 'release))
 
         dispatch))
+
+    ; 2017-06-02 
+    ; 3.50
+    (define (stream-map proc . argstreams)
+      (if (stream-null? (car argstreams))
+        the-empty-steam
+        (stream-cons
+          (apply proc (map stream-car argstreams))
+          (apply stream-map
+                 (cons proc (map stream-cdr argstreams))))))
+
+
 )
 
