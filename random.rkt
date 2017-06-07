@@ -3212,6 +3212,30 @@
           (apply stream-map
                  (cons proc (map stream-cdr argstreams))))))
 
+    ; 2017-06-06
+    (define (fibgen a b)
+      (cons-stream
+        a
+        (fibgen b (+ a b))))
+
+    (define (sieve s)
+      (let ((head (stream-car s)))
+        (cons-stream
+          head
+          (sieve
+            (stream-filter
+              (lambda (x) 
+                (not (divisible? x head)))
+              (stream-cdr s))))))
+
+    (define fibs
+      (cons-stream
+        0 
+        (cons-stream 
+          1
+          (add-streams (stream-cdr fibs) fibs))))
+
+
 
 )
 
