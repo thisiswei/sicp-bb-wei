@@ -3242,6 +3242,13 @@
     ; (define factorials
     ;   (cons-stream 1 (mul-streams integer factorials)))
 
+    ; 3.55
+    (define (partial-sums s)
+      (stream-cons (stream-car s)
+                   (add-stream (stream-cdr s) (partial-sums s))))
+
+    ; merge
+
 
 
 
