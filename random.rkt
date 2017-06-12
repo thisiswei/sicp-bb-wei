@@ -3203,37 +3203,38 @@
         dispatch))
 
     ; 2017-06-02 
+    ; commented out following because the definitions do not exist - may need to find equivilent ones in new version of scheme
     ; 3.50
-    (define (stream-map proc . argstreams)
-      (if (stream-null? (car argstreams))
-        the-empty-steam
-        (stream-cons
-          (apply proc (map stream-car argstreams))
-          (apply stream-map
-                 (cons proc (map stream-cdr argstreams))))))
+    ; (define (stream-map proc . argstreams)
+    ;   (if (stream-null? (car argstreams))
+    ;     the-empty-steam
+    ;     (stream-cons
+    ;       (apply proc (map stream-car argstreams))
+    ;       (apply stream-map
+    ;              (cons proc (map stream-cdr argstreams))))))
 
-    ; 2017-06-06
-    (define (fibgen a b)
-      (cons-stream
-        a
-        (fibgen b (+ a b))))
+    ; ; 2017-06-06
+    ; (define (fibgen a b)
+    ;   (cons-stream
+    ;     a
+    ;     (fibgen b (+ a b))))
 
-    (define (sieve s)
-      (let ((head (stream-car s)))
-        (cons-stream
-          head
-          (sieve
-            (stream-filter
-              (lambda (x) 
-                (not (divisible? x head)))
-              (stream-cdr s))))))
+    ; (define (sieve s)
+    ;   (let ((head (stream-car s)))
+    ;     (cons-stream
+    ;       head
+    ;       (sieve
+    ;         (stream-filter
+    ;           (lambda (x) 
+    ;             (not (divisible? x head)))
+    ;           (stream-cdr s))))))
 
-    (define fibs
-      (cons-stream
-        0 
-        (cons-stream 
-          1
-          (add-streams (stream-cdr fibs) fibs))))
+    ; (define fibs
+    ;   (cons-stream
+    ;     0 
+    ;     (cons-stream 
+    ;       1
+    ;       (add-streams (stream-cdr fibs) fibs))))
 
 
     ; 2017-06-12
