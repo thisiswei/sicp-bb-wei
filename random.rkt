@@ -3236,6 +3236,13 @@
           (add-streams (stream-cdr fibs) fibs))))
 
 
+    ; 2017-06-12
+    ; 3.54
+    ; (define factorials
+    ;   (cons-stream 1 (mul-streams integer factorials)))
+
+
+
 
 )
 
