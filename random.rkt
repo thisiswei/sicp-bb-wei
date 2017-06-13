@@ -3258,6 +3258,37 @@
                       ((< s1car s2car) (stream-cons s1car (merge (stream-cdr s1) s2)))
                       (else (stream-cons s1car (merge (stream-cdr s1) (stream-cdr s2)))))))))
 
+    ; 2017-06-13
+    ; 3.64
+    (define (stream-limit s tolerance)
+      (let ((tail (stream-cdr s)))
+        (define (helper s1 s2)
+          (if (stream-null s1)
+            null
+            (let ((head1 (stream-car s1))
+                  (head2 (stream-car s2)))
+              (if (<= head1 tolerance)
+                head2
+                (helper (stream-cdr s1)
+                        (stream-cdr s2))))))
+        (helper (stream-map - tail s) tail)))
+
+    ; 0 1
+    ; 2 3
+
+    ; 0 2, 0 3, 1 2, 1 3
+    ; 2 0, 0 3, 1 2, 1 3
+
+    (define (pair s t)
+      (let ((s-cdr (stream-cdr s))
+            (t-cdr (stream-cdr t)))
+        (stream-cons
+          (list (stream-car s) (stream-car t))
+          (interleave
+            (stream-map (lambda (x)
+                          (list (stream-car s) x))
+                        t-cdr)
+            (pair s-cdr t-cdr)))))
 
 )
 
