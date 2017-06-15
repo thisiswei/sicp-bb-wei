@@ -3290,5 +3290,36 @@
                         t-cdr)
             (pair s-cdr t-cdr)))))
 
+    ; 2017-06-15
+
+    ; s1: (1 2)
+    ; s2: (3 4)
+    ; ->
+
+    ; (1, 3) :: (interleave ((1, 4)) (pairs (2) (4)))
+    ; (1, 3) :: (1, 4) :: interleave (pairs (2) (4)) null
+    ; (1, 3) :: (1, 4) :: (pairs (2) (4))
+    ; (1, 3) :: (1, 4) :: (2, 4)
+    ; (1 3) (1 4) (2 3) (2 4)
+    ; (3 1) (3 2) (4 1) (4 2)
+
+    ; skip 2.67
+    ; skip streams as signals
+
+
+    (define rand
+      (let ((x random-init))
+        (lambda ()
+          (set! x (random-update x))
+          x)))
+
+    (define random-stream
+      (stream-cons
+        random-init
+        (steam-map
+          random-update
+          random-stream)))
+
+
 )
 
