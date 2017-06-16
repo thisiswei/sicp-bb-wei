@@ -3320,6 +3320,13 @@
           random-update
           random-stream)))
 
+    ; 2017-06-16
+    (define (stream-withdraw balance amount-stream)
+      (steam-cons
+        balance
+        (steam-withdraw (- balance (stream-car amount-stream))
+                        (stream-cdr amount-stream))))
+
 
 )
 
