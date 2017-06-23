@@ -3328,5 +3328,28 @@
                         (stream-cdr amount-stream))))
 
 
+    ; 2017-06-23
+    (define (eval the-exp env)
+      (cond ((self-evaluating the-exp) the-exp)
+            ((if? th-exp) (eval-if the-exp env))
+            ((quoted? the-exp) (text-of-quotation the-exp))
+            ((definition? the-exp) (eval-definition the-exp env))
+            ((assignment? the-exp) (eval-assignment the-exp env))
+            ((cond? the-exp) (eval (cond->if the-exp) env))
+            ((lambda? the-exp) (make-procedure
+                                 (lambda-parameter the-exp)
+                                 (lambda-body the-exp)
+                                 env))
+            ((begin? exp) (eval-seq (begin-actions the-exp) env))
+            ((application the-exp)
+             (applyit
+               (eval (operator the-exp) env)
+               (list-of-values (operands the-exp) env)))
+            ((variable? the-exp) (lookup-variable the-exp env))))
+
+
+
+
+
 )
 
