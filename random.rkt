@@ -3347,6 +3347,16 @@
                (list-of-values (operands the-exp) env)))
             ((variable? the-exp) (lookup-variable the-exp env))))
 
+    (define (applyit procedure arguments)
+      (cond ((primitive? procedure) (apply procedure arguments))
+            ((compound? procedure)
+             (eval-seq
+               (procedure-body procedure)
+               (extend-enviroment
+                 (procedure-parameters procedure)
+                 arguments
+                 (procedure-environment procedure))))))
+
 
 
 
