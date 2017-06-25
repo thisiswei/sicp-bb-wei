@@ -3358,6 +3358,24 @@
                  (procedure-environment procedure))))))
 
 
+    ; 2017-06-24
+    (define (list-of-values exps env)
+      (if (no-operands? exprs)
+        '()
+        (cons (eval (first-operand exps) env)
+              (list-of-values (rest-operands exps) env))))
+
+    (define (eval-if expr env)
+      (if (true? (if-predicate expr) env)
+        (eval (if-seq expr) env)
+        (eval (if-alternative expr) env)))
+
+    (define (eval-seq exprs env)
+      (if (last-expr exprs)
+        null
+        (begin
+          (eval (first-expr exprs) env)
+          (eval-seq (rest-expr exprs) env))))
 
 
 
