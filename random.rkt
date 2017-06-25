@@ -3378,6 +3378,13 @@
           (eval-seq (rest-expr exprs) env))))
 
 
+    (define (eval-assgiment expr env)
+      (set-var!
+        (assignment-variable expr)
+        (eval (assignment-value expr) env)
+        env))
+
+
 
 )
 
