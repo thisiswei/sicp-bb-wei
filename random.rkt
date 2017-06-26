@@ -3404,6 +3404,16 @@
 
     (define (assignment-value expr) (caddr expr))
 
+    (define (lambda? expr) (tagged-list? expr 'lambda))
+
+    (define (lambda-parameter expr) (cadr expr))
+
+    (define (lambda-body expr) (cddr expr))
+
+    (define (make-lambda parameter body) (cons 'lambda (cons parameter body))
+
+
+
 
 
 
