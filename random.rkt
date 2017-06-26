@@ -3425,6 +3425,24 @@
         (cadddr expr)
         'f))
 
+    (define (begin? expr) (tagged-list? expr 'begin))
+
+    (define (begin-actions expr) (cdr expr))
+
+    (define (last-expr? seq) (null? seq))
+
+    (define (rest-expr seq) (cdr seq))
+
+    (define (first-expr seq) (car seq))
+
+    (define (seq->exp seq)
+      (cond ((null? seq) seq)
+            ((last-expr? seq) (car seq))
+            (else (make-begin seq))))
+
+    (define (make-begin seq) (cons 'begin seq))
+
+
 
 
 
