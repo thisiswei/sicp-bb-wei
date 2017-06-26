@@ -3442,13 +3442,31 @@
 
     (define (make-begin seq) (cons 'begin seq))
 
+    (define (cond? expr) (tagged-list? expr 'cond))
 
+    (define (cond-clauses expr) (cdr expr))
 
+    (define (cond-else-clause? clause)
+      (eq? (cond-predicate clause) 'else))
 
+    (define (cond-predicate clause) (car clause))
 
+    (define (cond-actions clause) (cdr clause))
 
+    (define (cond->if expr) (expand-clauses (cond-clauses expr)))
 
-
+    (define (expand-clauses clauses)
+      (if (null? clauses)
+        'false
+        (let ((first (car clauses))
+              (rest (cdr clauses)))
+          (if (cond-else-clause? first)
+            (seq->exp (cond-actions first))
+            ;(define (make-if pred seq alt) (list 'if pred seq alt))
+            (make-if
+              (cond-predicate first)
+              (seq->exp (cond-actions first))
+              (expand-clauses rest))))))
 
 
 )
