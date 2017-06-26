@@ -3412,6 +3412,18 @@
 
     (define (make-lambda parameter body) (cons 'lambda (cons parameter body)))
 
+    (define (if? expr) (tagged-list? expr 'if))
+
+    (define (make-if pred seq alt) (list 'if pred seq alt))
+
+    (define (if-predicate expr) (cadr expr))
+
+    (define (if-seq expr) (caddr expr))
+
+    (define (if-alternative expr)
+      (if (not (null? (cdddr expr)))
+        (cadddr expr)
+        'f))
 
 
 
