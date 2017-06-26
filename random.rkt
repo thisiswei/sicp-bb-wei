@@ -3385,6 +3385,29 @@
         env))
 
 
+    (define (quoted? expr)
+      (tagged-list? expr 'quote))
+
+
+    (define (text-of-quotation expr)
+      (cadr expr))
+
+
+    (define (tagged-list? expr tag)
+      (if (pair? expr)
+        (eq? (car expr) tag)
+        #f))
+
+    (define (assignment? expr) (tagged-list? expr 'set!))
+
+    (define (assignment-variable expr) (cadr expr))
+
+    (define (assignment-value expr) (caddr expr))
+
+
+
+
+
 
 )
 
